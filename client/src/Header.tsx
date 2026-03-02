@@ -1,15 +1,11 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { MenuButton } from "./MenuButton.tsx";
-import {
-  h6Style,
-  toolbarBoxStyle,
-  toolbarStyle,
-} from "./utils/StylingConsts.jsx";
+import { MenuButton } from "./MenuButton";
+import { h6Style, toolbarBoxStyle, toolbarStyle } from "./utils/StylingConsts";
+import * as React from "react";
 
 const Header = () => {
   return (

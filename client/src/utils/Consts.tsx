@@ -1,4 +1,6 @@
-export const regexes = {
+import { RegexesType } from "./Types";
+
+export const regexes: RegexesType = {
   name: { regex: /^.{1,100}$/, errorMessage: "Please enter a name" },
   email: {
     regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,

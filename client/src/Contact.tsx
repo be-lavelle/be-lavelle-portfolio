@@ -16,9 +16,13 @@ import {
   helperTextStyle,
   textFieldStyle,
 } from "./utils/StylingConsts";
-
 import { regexes } from "./utils/Consts";
 
+type Values = {
+  name: string;
+  message: string;
+  email: string;
+};
 export const Contact = () => {
   const [values, setValues] = React.useState({
     name: "",
@@ -36,7 +40,7 @@ export const Contact = () => {
     message: "1000/1000",
   });
 
-  const validate = (newValues) => {
+  const validate = (newValues: Values) => {
     return (
       regexes.name.regex.test(newValues.name) &&
       regexes.email.regex.test(newValues.email) &&
@@ -44,9 +48,9 @@ export const Contact = () => {
     );
   };
 
-  const onChange = (event) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    const helperText = regexes[name].regex.test(value)
+    const newHelperText = regexes[name].regex.test(value)
       ? ""
       : regexes[name].errorMessage;
     let newValues = {
@@ -77,11 +81,11 @@ export const Contact = () => {
         break;
     }
     const areAllValid = validate(newValues);
-    setHelperText({ ...helperText, [name]: helperText });
-    setValues({ ...newValues, areAllValid });
+    setHelperText({ ...helperText, [name]: newHelperText });
+    setValues({ ...newValues });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     console.log("Form", values);
     const templateParams = {
@@ -159,7 +163,11 @@ export const Contact = () => {
           <Button
             variant="contained"
             onClick={handleSubmit}
-            disabled={!values.areAllValid}
+            disabled={
+              !values.isNameValid ||
+              !values.isEmailValid ||
+              !values.isMessageValid
+            }
           >
             Submit
           </Button>
