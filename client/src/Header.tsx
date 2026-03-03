@@ -16,6 +16,7 @@ const Header = () => {
         </Typography>
 
         <Box sx={toolbarBoxStyle}>
+          <MenuButton to="/two-point-line" name="2-Point Line" />
           <MenuButton to="/about" name="About" />
           <MenuButton to="/contact" name="Contact" />
         </Box>

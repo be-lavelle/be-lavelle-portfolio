@@ -23,3 +23,9 @@ export const boxStyle = { m: 1, width: "100%" };
 export const textFieldStyle = { mt: 1 };
 
 export const helperTextStyle = { ml: 1, mb: 0.35 };
+
+export const gridAbbrevItemStyle = {
+  justifyContent: "center",
+  alignItems: "center",
+  display: "flex",
+};
