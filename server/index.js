@@ -4,9 +4,9 @@ const cors = require("cors");
 
 app.use(cors());
 
-app.get("/", async (req, res) => {
-  const team = "COL";
-  const season = "20242025";
+app.get("/team/:teamId/season/:seasonId", async (req, res) => {
+  const team = req.params.teamId;
+  const season = req.params.seasonId;
   let teamSchedule = await fetch(
     `https://api-web.nhle.com/v1/club-schedule-season/${team}/${season}`,
   ).then((response) => response.json());

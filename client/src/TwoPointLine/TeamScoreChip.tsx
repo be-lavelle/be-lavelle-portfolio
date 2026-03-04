@@ -1,7 +1,7 @@
 import { Grid, Typography, Chip } from "@mui/material";
 import React from "react";
 import { Team } from "../utils/Types";
-import { gridAbbrevItemStyle } from "../utils/StylingConsts";
+import { chipScoreStyle, gridAbbrevItemStyle } from "../utils/StylingConsts";
 
 export const TeamScoreChip = (team: Team) => {
   return (
@@ -17,14 +17,7 @@ export const TeamScoreChip = (team: Team) => {
         <Typography component="h6">{team.abbrev}</Typography>
       </Grid>
       <Grid size={4} sx={gridAbbrevItemStyle}>
-        <Chip
-          label={team.score}
-          sx={{
-            fontWeight: 900,
-            background: team.color,
-            color: team.blackText ? "black" : "white",
-          }}
-        />
+        <Chip label={team.score} sx={chipScoreStyle(team)} />
       </Grid>
     </>
   );

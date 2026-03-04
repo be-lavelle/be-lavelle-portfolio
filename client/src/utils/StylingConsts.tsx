@@ -1,3 +1,5 @@
+import { Team } from "./Types";
+
 export const h4Style = {
   flexGrow: 1,
   color: "#966a9e",
@@ -28,4 +30,18 @@ export const gridAbbrevItemStyle = {
   justifyContent: "center",
   alignItems: "center",
   display: "flex",
+};
+
+export const chipScoreStyle = (team: Team) => {
+  return {
+    fontWeight: 900,
+    background: team.color,
+    color: team.blackText ? "black" : "white",
+  };
+};
+
+export const mappedGamesBoxStyle = {
+  display: "flex",
+  justifyContent: "center",
+  flexWrap: "wrap",
 };

@@ -14,7 +14,12 @@ import { TeamScoreChip } from "./TeamScoreChip";
 
 export const GameExpand = (game: Game) => {
   return (
-    <Accordion sx={{ mb: 0 }}>
+    <Accordion
+      sx={{
+        mb: 0,
+        width: "60%",
+      }}
+    >
       <AccordionSummary
         expandIcon={<ArrowDropDownIcon />}
         aria-controls="panel1-content"

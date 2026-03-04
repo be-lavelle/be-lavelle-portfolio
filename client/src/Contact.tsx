@@ -18,11 +18,6 @@ import {
 } from "./utils/StylingConsts";
 import { regexes } from "./utils/Consts";
 
-type Values = {
-  name: string;
-  message: string;
-  email: string;
-};
 export const Contact = () => {
   const [values, setValues] = React.useState({
     name: "",
@@ -39,14 +34,6 @@ export const Contact = () => {
     email: "",
     message: "1000/1000",
   });
-
-  const validate = (newValues: Values) => {
-    return (
-      regexes.name.regex.test(newValues.name) &&
-      regexes.email.regex.test(newValues.email) &&
-      regexes.message.regex.test(newValues.message)
-    );
-  };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -80,7 +67,6 @@ export const Contact = () => {
       default:
         break;
     }
-    const areAllValid = validate(newValues);
     setHelperText({ ...helperText, [name]: newHelperText });
     setValues({ ...newValues });
   };

@@ -1,8 +1,6 @@
 import { allTeamColors } from "../utils/Consts";
 
 export const createTeam = (team: any) => {
-  console.log(`${team.abbrev}`);
-  console.log(`${allTeamColors[team.abbrev][0]}`);
   return {
     abbrev: team.abbrev,
     score: team.score,
