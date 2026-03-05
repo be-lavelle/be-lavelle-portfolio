@@ -97,11 +97,20 @@ export const TwoPointLine = () => {
             <option value={""} disabled hidden></option>
             {Object.keys(teamsInDropdown).map((team) => {
               if (
-                (selectedSeason === "20242025" ||
+                ((selectedSeason === "20242025" ||
                   selectedSeason === "20252026") &&
-                team === "ARI"
+                  team === "ARI") ||
+                ((selectedSeason === "20222023" ||
+                  selectedSeason === "20232024") &&
+                  team === "UTA")
               ) {
                 return;
+              } else if (selectedSeason === "20242025" && team === "UTA") {
+                return (
+                  <option value={team} key={team}>
+                    {"Utah Hockey Club"}
+                  </option>
+                );
               } else {
                 return (
                   <option value={team} key={team}>
