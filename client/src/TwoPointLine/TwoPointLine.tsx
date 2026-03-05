@@ -9,11 +9,14 @@ import { createTeam } from "./DataAdapter";
 import {
   Box,
   FormControl,
+  Grid,
   InputLabel,
   NativeSelect,
   Toolbar,
 } from "@mui/material";
 import { allTeams, seasons } from "../utils/Consts";
+
+import { GameExpandWrapper } from "./FormattingWrappers";
 
 export const TwoPointLine = () => {
   let games = [];
@@ -72,10 +75,6 @@ export const TwoPointLine = () => {
       <Typography variant="h4" sx={h4Style}>
         Two Point Line
       </Typography>
-      <Typography>
-        {selectedSeason}
-        {selectedTeam}
-      </Typography>
       <Toolbar>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
           <InputLabel variant="standard" htmlFor="uncontrolled-native">
@@ -113,18 +112,33 @@ export const TwoPointLine = () => {
             })}
           </NativeSelect>
         </FormControl>
+        <Button onClick={handleSubmit}>Refresh</Button>
       </Toolbar>
-      <Button onClick={handleSubmit}>Refresh</Button>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-        }}
-      >
-        {mappedGames}
-      </Box>
+      <Grid container spacing={1} sx={{ paddingLeft: 4, paddingRight: 4 }}>
+        <Grid
+          size={{ md: 4, sm: 12 }}
+          maxHeight={{ md: "60vh", sm: "120px" }}
+          overflow="auto"
+          sx={{
+            border: "3px #62626221",
+            borderStyle: "solid",
+            borderRadius: "2px",
+          }}
+        >
+          <Box>{mappedGames}</Box>
+        </Grid>
+        <Grid
+          size={{ md: 8, sm: 12 }}
+          maxHeight={{ md: "60vh", sm: "40vh" }}
+          sx={{
+            border: "3px #62626221",
+            borderStyle: "solid",
+            borderRadius: "2px",
+          }}
+        >
+          <div>BIG TEST DIV</div>
+        </Grid>
+      </Grid>
     </div>
   );
 };

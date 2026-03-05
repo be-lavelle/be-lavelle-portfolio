@@ -17,7 +17,7 @@ export const GameExpand = (game: Game) => {
     <Accordion
       sx={{
         mb: 0,
-        width: "60%",
+        width: "100%",
       }}
     >
       <AccordionSummary
