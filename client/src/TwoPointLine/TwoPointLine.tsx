@@ -33,7 +33,7 @@ export const TwoPointLine = () => {
         )
         .then((data) => {
           console.log(data);
-          games = data.data.games;
+          games = data.data;
           let gameMap = games.map((game) => {
             const homeTeam: Team = createTeam(game.homeTeam);
             const awayTeam: Team = createTeam(game.awayTeam);
@@ -116,7 +116,7 @@ export const TwoPointLine = () => {
       </Toolbar>
       <Grid container spacing={1} sx={{ paddingLeft: 4, paddingRight: 4 }}>
         <Grid
-          size={{ md: 4, sm: 12 }}
+          size={{ md: 3, sm: 12 }}
           maxHeight={{ md: "60vh", sm: "120px" }}
           overflow="auto"
           sx={{
@@ -128,7 +128,7 @@ export const TwoPointLine = () => {
           <Box>{mappedGames}</Box>
         </Grid>
         <Grid
-          size={{ md: 8, sm: 12 }}
+          size={{ md: 9, sm: 12 }}
           maxHeight={{ md: "60vh", sm: "40vh" }}
           sx={{
             border: "3px #62626221",

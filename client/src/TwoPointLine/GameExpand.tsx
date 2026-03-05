@@ -11,6 +11,7 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Game } from "../utils/Types";
 import { TeamScoreChip } from "./TeamScoreChip";
+import "../App.css";
 
 export const GameExpand = (game: Game) => {
   return (
@@ -19,13 +20,15 @@ export const GameExpand = (game: Game) => {
         mb: 0,
         width: "100%",
       }}
+      slotProps={{ transition: { unmountOnExit: true } }}
     >
       <AccordionSummary
         expandIcon={<ArrowDropDownIcon />}
         aria-controls="panel1-content"
         id="panel1-header"
+        sx={{ width: "100%", justifyContent: "center", display: "flex" }}
       >
-        <Grid container spacing={1} width={"200px"}>
+        <Grid container spacing={1} width={"auto"}>
           <TeamScoreChip {...game.homeTeam} />
           <TeamScoreChip {...game.awayTeam} />
         </Grid>

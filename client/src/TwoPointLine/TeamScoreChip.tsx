@@ -6,17 +6,17 @@ import { chipScoreStyle, gridAbbrevItemStyle } from "../utils/StylingConsts";
 export const TeamScoreChip = (team: Team) => {
   return (
     <>
-      <Grid size={3} sx={gridAbbrevItemStyle}>
+      <Grid size={{ sm: 2, md: 3 }} sx={gridAbbrevItemStyle}>
         <img
           src={team.img}
           aria-label={`${team.fullTeamName} Logo`}
           width="64px"
         ></img>
       </Grid>
-      <Grid size={5} sx={gridAbbrevItemStyle}>
+      <Grid size={{ sm: 2, md: 5 }} sx={gridAbbrevItemStyle}>
         <Typography component="h6">{team.abbrev}</Typography>
       </Grid>
-      <Grid size={4} sx={gridAbbrevItemStyle}>
+      <Grid size={{ sm: 2, md: 4 }} sx={gridAbbrevItemStyle}>
         <Chip label={team.score} sx={chipScoreStyle(team)} />
       </Grid>
     </>
