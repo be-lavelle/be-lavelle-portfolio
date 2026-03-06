@@ -22,3 +22,8 @@ export type Game = {
   homeTeam: Team;
   awayTeam: Team;
 };
+
+export type GameExpandController = {
+  game: Game;
+  onChange?: any;
+};

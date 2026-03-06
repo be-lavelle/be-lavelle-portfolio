@@ -4,40 +4,56 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Box,
-  Chip,
   Grid,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { Game } from "../utils/Types";
+import { GameExpandController } from "../utils/Types";
 import { TeamScoreChip } from "./TeamScoreChip";
 import "../App.css";
 
-export const GameExpand = (game: Game) => {
+export const GameExpand = (gameExpandController: GameExpandController) => {
+  const [focused, setFocused] = React.useState(false);
+  const [backgroundColor, setBackgroundColor] = React.useState("#ffffff");
+
+  React.useEffect(() => {
+    setBackgroundColor(focused ? "#def2ff" : "#ffffff");
+  }, [focused]);
+
   return (
     <Accordion
       sx={{
         mb: 0,
         width: "100%",
+        backgroundColor: backgroundColor,
       }}
       slotProps={{ transition: { unmountOnExit: true } }}
+      onChange={(e, expanded) => {
+        if (expanded) {
+          gameExpandController.onChange();
+          setFocused(true);
+        } else {
+          setFocused(false);
+        }
+      }}
+      expanded={focused}
+      disableGutters
     >
       <AccordionSummary
         expandIcon={<ArrowDropDownIcon />}
         aria-controls="panel1-content"
         id="panel1-header"
         sx={{ width: "100%", justifyContent: "center", display: "flex" }}
+        onBlur={() => {
+          setFocused(false);
+        }}
       >
         <Grid container spacing={1} width={"auto"}>
-          <TeamScoreChip {...game.homeTeam} />
-          <TeamScoreChip {...game.awayTeam} />
+          <TeamScoreChip {...gameExpandController.game.homeTeam} />
+          <TeamScoreChip {...gameExpandController.game.awayTeam} />
         </Grid>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
-        </Typography>
+        <Typography>BLEP</Typography>
       </AccordionDetails>
     </Accordion>
   );

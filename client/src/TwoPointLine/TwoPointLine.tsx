@@ -16,14 +16,13 @@ import {
 } from "@mui/material";
 import { allTeams, seasons } from "../utils/Consts";
 
-import { GameExpandWrapper } from "./FormattingWrappers";
-
 export const TwoPointLine = () => {
   let games = [];
   const [mappedGames, setMappedGames] = React.useState([]);
   const [teamsInDropdown, setTeamsInDropdown] = React.useState(allTeams);
   const [selectedSeason, setSelectedSeason] = React.useState("");
   const [selectedTeam, setSelectedTeam] = React.useState("");
+  const [chartKey, setChartKey] = React.useState("");
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     if (selectedSeason !== "" && selectedTeam !== "") {
@@ -37,13 +36,19 @@ export const TwoPointLine = () => {
           let gameMap = games.map((game) => {
             const homeTeam: Team = createTeam(game.homeTeam);
             const awayTeam: Team = createTeam(game.awayTeam);
-
+            const gameToExpand = {
+              gameDate: game.gameDate,
+              homeTeam: homeTeam,
+              awayTeam: awayTeam,
+              key: game.id,
+            };
             return (
               <GameExpand
-                gameDate={game.gameDate}
+                game={gameToExpand}
                 key={game.id}
-                homeTeam={homeTeam}
-                awayTeam={awayTeam}
+                onChange={() => {
+                  setChartKey(game.id);
+                }}
               />
             );
           });
@@ -145,7 +150,7 @@ export const TwoPointLine = () => {
             borderRadius: "2px",
           }}
         >
-          <div>BIG TEST DIV</div>
+          <div>{chartKey}</div>
         </Grid>
       </Grid>
     </div>
