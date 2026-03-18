@@ -17,6 +17,14 @@ app.get("/team/:teamId/season/:seasonId", async (req, res) => {
   res.send(teamSchedule);
 });
 
+app.get("/game/:gameId/", async (req, res) => {
+  const game = req.params.gameId;
+  let goalsForGame = await fetch(
+    `https://api-web.nhle.com/v1/gamecenter/${game}/play-by-play`,
+  ).then((response) => response.json());
+  res.send(goalsForGame);
+});
+
 app.listen(8080, () => {
   console.log("server listening on port 8080");
 });

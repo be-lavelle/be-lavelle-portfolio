@@ -19,6 +19,15 @@ export const GameExpand = (gameExpandController: GameExpandController) => {
     setBackgroundColor(focused ? "#def2ff" : "#ffffff");
   }, [focused]);
 
+  const onGameExpandChange = (e, expanded) => {
+    if (expanded) {
+      gameExpandController.onChange();
+      setFocused(true);
+    } else {
+      setFocused(false);
+    }
+  };
+
   return (
     <Accordion
       sx={{
@@ -27,14 +36,7 @@ export const GameExpand = (gameExpandController: GameExpandController) => {
         backgroundColor: backgroundColor,
       }}
       slotProps={{ transition: { unmountOnExit: true } }}
-      onChange={(e, expanded) => {
-        if (expanded) {
-          gameExpandController.onChange();
-          setFocused(true);
-        } else {
-          setFocused(false);
-        }
-      }}
+      onChange={onGameExpandChange}
       expanded={focused}
       disableGutters
     >

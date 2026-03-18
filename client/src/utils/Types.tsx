@@ -27,3 +27,26 @@ export type GameExpandController = {
   game: Game;
   onChange?: any;
 };
+
+export type Player = {
+  name: string;
+  number: number;
+  id: string;
+  position: string;
+  team: string;
+};
+
+export type Play = {
+  playmakingTeam: string;
+  defendingTeam: string;
+  gameId: number;
+  x: number;
+  y: number;
+  distanceFromGoal: number;
+  againstGoalie: any;
+  player: string;
+  period: number;
+  isENPlay: boolean;
+  isShotOrGoal: string;
+  is2PtGoal: boolean;
+};

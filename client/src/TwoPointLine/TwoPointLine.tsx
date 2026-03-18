@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { GameExpand } from "./GameExpand";
 import { Team } from "../utils/Types";
-import { createTeam } from "./DataAdapter";
+import { createTeam, mapGoals } from "./DataAdapter";
 import {
   Box,
   FormControl,
@@ -15,6 +15,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import { allTeams, seasons } from "../utils/Consts";
+import { HockeyChart } from "./HockeyChart";
 
 export const TwoPointLine = () => {
   let games = [];
@@ -23,6 +24,14 @@ export const TwoPointLine = () => {
   const [selectedSeason, setSelectedSeason] = React.useState("");
   const [selectedTeam, setSelectedTeam] = React.useState("");
   const [chartKey, setChartKey] = React.useState("");
+  const [goalsForGame, setGoalsForGame] = React.useState({});
+
+  const getGameData = (gameId: string) => {
+    axios.get(`http://localhost:8080/game/${gameId}`).then((json) => {
+      let goals = mapGoals(json.data);
+      setGoalsForGame(goals);
+    });
+  };
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     if (selectedSeason !== "" && selectedTeam !== "") {
@@ -48,6 +57,7 @@ export const TwoPointLine = () => {
                 key={game.id}
                 onChange={() => {
                   setChartKey(game.id);
+                  getGameData(game.id);
                 }}
               />
             );
@@ -150,7 +160,7 @@ export const TwoPointLine = () => {
             borderRadius: "2px",
           }}
         >
-          <div>{chartKey}</div>
+          <HockeyChart goals={goalsForGame} />
         </Grid>
       </Grid>
     </div>
