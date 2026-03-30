@@ -6,6 +6,7 @@ import { Container, Box } from "@mui/material";
 import { Contact } from "./Contact";
 import * as React from "react";
 import { TwoPointLine } from "./TwoPointLine/TwoPointLine";
+import { Standings } from "./TwoPointLine/Standings";
 
 // Placeholder components for different pages
 const HomePage = () => <Typography variant="h4">Welcome Home!</Typography>;
@@ -19,6 +20,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/two-point-line" element={<TwoPointLine />} />
+          <Route path="/standings" element={<Standings />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
