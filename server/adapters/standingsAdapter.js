@@ -1,37 +1,63 @@
 export function mapGamesToPoints(games, team) {
   let points = 0;
+  let totalPossiblePoints = 0;
+  let regulationWins = 0;
+  let regulationAndOvertimeWins = 0;
+  let totalWins = 0;
   games.forEach((game) => {
     if (game.gameOutcome) {
       let isOT = game.gameOutcome.lastPeriodType !== "REG";
+      let isSO = game.gameOutcome.lastPeriodType === "SO";
+
+      let gameResult = 0;
       if (game.homeTeam.abbrev === team.abbrev) {
-        points += getResultOfGame(game.homeTeam, game.awayTeam, isOT);
+        gameResult = getResultOfGame(game.homeTeam, game.awayTeam, isOT);
+        points += gameResult;
       } else {
-        points += getResultOfGame(game.awayTeam, game.homeTeam, isOT);
+        gameResult = getResultOfGame(game.awayTeam, game.homeTeam, isOT);
+        points += gameResult;
       }
+      regulationWins += gameResult === 2 && !isOT ? 1 : 0;
+      regulationAndOvertimeWins += gameResult === 2 && !isSO ? 1 : 0;
+      totalWins += gameResult === 2 ? 1 : 0;
+      totalPossiblePoints += 2;
     }
   });
-  return { team, points };
+  let pointsPercentage =
+    Math.floor(Math.round(1000 * (points / totalPossiblePoints))) / 1000;
+
+  return {
+    team,
+    points,
+    pointsPercentage: pointsPercentage,
+    regulationWins: regulationWins,
+    regulationAndOvertimeWins: regulationAndOvertimeWins,
+    totalWins: totalWins,
+  };
 }
 
 export function mapPointsToLeagueRankings(allTeamPoints) {
-  const sorted = allTeamPoints.sort(sortByPoints());
+  const sorted = allTeamPoints.sort(sortByPoints()).filter((x) => x);
   return sorted;
 }
 
 export function mapPointsToDivisionRankings(leagueRankings) {
-  let pacific = leagueRankings.filter((team) => {
-    return team.team.division === "Pacific";
-  });
-  let atlantic = leagueRankings.filter((team) => {
-    return team.team.division === "Atlantic";
-  });
-  let central = leagueRankings.filter((team) => {
-    return team.team.division === "Central";
-  });
-  let metropolitan = leagueRankings.filter((team) => {
-    return team.team.division === "Metropolitan";
-  });
-  return { pacific, central, atlantic, metropolitan };
+  if (leagueRankings) {
+    let pacific = leagueRankings.filter((team) => {
+      return team.team.division === "Pacific";
+    });
+    let atlantic = leagueRankings.filter((team) => {
+      return team.team.division === "Atlantic";
+    });
+    let central = leagueRankings.filter((team) => {
+      return team.team.division === "Central";
+    });
+    let metropolitan = leagueRankings.filter((team) => {
+      return team.team.division === "Metropolitan";
+    });
+    return { pacific, central, atlantic, metropolitan };
+  }
+  return {};
 }
 
 export function mapPointsToConferenceRankings(divisionRankings) {
@@ -75,9 +101,26 @@ export function mapPointsToWildcardRankings(divisionRankings) {
   };
 }
 
+// TODO: implement sorting by all factors
 function sortByPoints() {
   return function (a, b) {
-    return b.points - a.points;
+    if (b.points === a.points) {
+      if (b.pointsPercentage === a.pointsPercentage) {
+        if (b.regulationWins === a.regulationWins) {
+          if (b.regulationAndOvertimeWins === a.regulationAndOvertimeWins) {
+            return b.totalWins - a.totalWins;
+          } else {
+            return b.regulationAndOvertimeWins - a.regulationAndOvertimeWins;
+          }
+        } else {
+          return b.regulationWins - a.regulationWins;
+        }
+      } else {
+        return b.pointsPercentage - a.pointsPercentage;
+      }
+    } else {
+      return b.points - a.points;
+    }
   };
 }
 

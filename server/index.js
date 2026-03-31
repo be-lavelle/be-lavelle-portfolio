@@ -25,7 +25,9 @@ app.get("/standings/:standingsType/season/:seasonId", async (req, res) => {
   let allTeamData = await Promise.all(
     Object.keys(teams).map(async (team) => {
       return await getRegularSeasonGamesForTeam(team, season).then((games) => {
-        return mapGamesToPoints(games, teams[team]);
+        if (games) {
+          return mapGamesToPoints(games, teams[team]);
+        }
       });
     }),
   );
@@ -34,9 +36,13 @@ app.get("/standings/:standingsType/season/:seasonId", async (req, res) => {
   let divisionRankings = mapPointsToDivisionRankings(leagueRankings);
   let conferenceRankings = mapPointsToConferenceRankings(divisionRankings);
   let wildcardRankings = mapPointsToWildcardRankings(divisionRankings);
-  console.log(wildcardRankings);
 
-  res.send(allTeamData);
+  res.send({
+    leagueRankings,
+    divisionRankings,
+    conferenceRankings,
+    wildcardRankings,
+  });
 });
 
 app.get("/team/:teamId/season/:seasonId", async (req, res) => {
@@ -69,6 +75,7 @@ async function getRegularSeasonGamesForTeam(team, season) {
     .then((response) => response.json())
     .then((json) => {
       return getAllRegularSeasonGameIdsForTeam(json);
-    });
+    })
+    .catch((error) => console.log(error));
   return teamSchedule;
 }
