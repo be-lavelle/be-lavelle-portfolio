@@ -28,7 +28,7 @@ export const TwoPointLine = () => {
 
   const getGameData = (gameId: string) => {
     axios.get(`http://localhost:8080/game/${gameId}`).then((json) => {
-      let goals = mapGoals(json.data);
+      let goals = json.data;
       setGoalsForGame(goals);
     });
   };
