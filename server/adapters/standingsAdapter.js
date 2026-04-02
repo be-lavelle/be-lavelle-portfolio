@@ -1,8 +1,11 @@
-export function mapGoals(json) {
+export function getGameBreakdown(json, season) {
   const gameId = json.id;
+  const gameDate = json.gameDate;
   const homeTeamAbbrev = json.homeTeam.abbrev;
   const awayTeamAbbrev = json.awayTeam.abbrev;
   const homeTeamId = json.homeTeam.id;
+  let isOT = json.gameOutcome.lastPeriodType !== "REG";
+  let isSO = json.gameOutcome.lastPeriodType === "SO";
   const homeTeamRoster = [];
   const awayTeamRoster = [];
   const allPlayers = {};
@@ -82,32 +85,17 @@ export function mapGoals(json) {
   const originalScore = getOriginalAndUpdatedScores.originalScore;
   const updatedScore = getOriginalAndUpdatedScores.updatedScore;
 
-  let isOT = json.gameOutcome.lastPeriodType !== "REG";
-  let isSO = json.gameOutcome.lastPeriodType === "SO";
-
   const isOriginalHomeWin = originalScore.home - originalScore.away > 0;
   const isUpdatedHomeWin = updatedScore.home - updatedScore.away > 0;
   const isUpdatedTie = updatedScore.home === updatedScore.away;
   const originalResult = {
-    [`${json.homeTeam.abbrev}`]: isOriginalHomeWin ? "W" : isOT ? "OTL" : "L",
-    [`${json.awayTeam.abbrev}`]: isOriginalHomeWin ? (isOT ? "OTL" : "L") : "W",
+    home: isOriginalHomeWin ? "W" : isOT ? "OTL" : "L",
+    away: isOriginalHomeWin ? (isOT ? "OTL" : "L") : "W",
   };
 
   let updatedResult = {
-    [`${json.homeTeam.abbrev}`]: isUpdatedTie
-      ? "T"
-      : isUpdatedHomeWin
-        ? "W"
-        : isOT
-          ? "OTL"
-          : "L",
-    [`${json.awayTeam.abbrev}`]: isUpdatedTie
-      ? "T"
-      : isUpdatedHomeWin
-        ? isOT
-          ? "OTL"
-          : "L"
-        : "W",
+    home: isUpdatedTie ? "T" : isUpdatedHomeWin ? "W" : isOT ? "OTL" : "L",
+    away: isUpdatedTie ? "T" : isUpdatedHomeWin ? (isOT ? "OTL" : "L") : "W",
   };
 
   const was2ptGoalScored =
@@ -118,19 +106,25 @@ export function mapGoals(json) {
       return goal.is2PtGoal;
     });
 
-  return {
-    isOT: isOT,
-    isSO: isSO,
+  const game = {
+    season: season,
     gameId: gameId,
+    gameDate: gameDate,
+    homeTeamAbbrev: homeTeamAbbrev,
+    awayTeamAbbrev: awayTeamAbbrev,
+    score: originalScore,
+    result: originalResult,
+    isOvertime: isOT,
+    isShootout: isSO,
+  };
+
+  return {
+    game: game,
     was2ptGoalScored: was2ptGoalScored,
-    homeTeam: homeTeamAbbrev,
-    awayTeam: awayTeamAbbrev,
-    homeGoals: homeTeamGoals,
-    awayGoals: awayTeamGoals,
-    originalScore,
-    updatedScore,
-    originalResult,
-    updatedResult,
+    homeTeamGoals: homeTeamGoals,
+    awayTeamGoals: awayTeamGoals,
+    scoreWithTwoPointLine: updatedScore,
+    resultWithTwoPointLine: updatedResult,
   };
 }
 
@@ -293,9 +287,7 @@ function buildBreakdown(
     isRight,
   );
 
-  const isENPlay =
-    play.situationCode.substring(0, 1) === "0" ||
-    play.situationCode.substring(3, 4) === "0";
+  const isENPlay = play.details.goalieInNetId === undefined;
 
   const playBreakdown = {
     playmakingTeam: playmakingTeam,
@@ -304,10 +296,10 @@ function buildBreakdown(
     x: play.details.xCoord,
     y: play.details.yCoord,
     distanceFromGoal: distance,
-    againstGoalie: play.details,
-    player: playerId,
+    againstGoalie: isENPlay ? 0 : play.details.goalieInNetId,
+    playerId: playerId,
     period: play.periodDescriptor.number,
-    isENPlay: isENPlay,
+    isEmptyNetPlay: isENPlay,
     isShotOrGoal: shotOrGoal,
     is2PtGoal: shotOrGoal === "goal" && distance > 43.5 && !isENPlay,
   };

@@ -15,6 +15,14 @@ export const Standings = () => {
       });
   };
 
+  const handleSubmitDelete = (e: React.SyntheticEvent) => {
+    axios
+      .get(`http://localhost:8080/deleteDupes/${selectedSeason}`)
+      .then((data) => {
+        console.log(data);
+      });
+  };
+
   const dropdownSeasons = Object.keys(seasons).map((season) => {
     return (
       <option value={seasons[season]} key={season}>
@@ -34,7 +42,8 @@ export const Standings = () => {
         <option value={""} disabled hidden></option>
         {dropdownSeasons}
       </NativeSelect>
-      ;<Button onClick={handleSubmit}>Refresh</Button>
+      <Button onClick={handleSubmit}>Refresh</Button>
+      <Button onClick={handleSubmitDelete}>Delete Dupes</Button>
     </div>
   );
 };
