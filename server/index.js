@@ -16,7 +16,6 @@ import { MongoClient } from "mongodb";
 
 import "./loadEnvironment.js";
 import mongoose from "mongoose";
-import { TestItem } from "./models/test.model.js";
 import { GameBreakdown, Game } from "./models/gameBreakdown.model.js";
 
 app.use(cors());
