@@ -1,5 +1,5 @@
 export function getAllRegularSeasonGamesForTeam(json, season) {
-  const regularSeasonGames = json.games.filter((game) => game.gameType === 2);
+  const regularSeasonGames = json.games.filter((game) => game.gameType === 2 && game.gameState !== "FUT");
   const mappedGames = regularSeasonGames.map((game) => {
     return mapGame(game, season);
   });

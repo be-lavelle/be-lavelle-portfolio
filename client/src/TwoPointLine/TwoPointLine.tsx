@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { allTeams, seasons } from "../utils/Consts";
 import { HockeyChart } from "./HockeyChart";
+import { log } from "console";
 
 export const TwoPointLine = () => {
   let games = [];
@@ -27,10 +28,12 @@ export const TwoPointLine = () => {
   const [goalsForGame, setGoalsForGame] = React.useState({});
 
   const getGameData = (gameId: string) => {
-    axios.get(`http://localhost:8080/game/${gameId}`).then((json) => {
-      let goals = json.data;
-      setGoalsForGame(goals);
-    });
+    axios
+      .get(`http://localhost:8080/game/${gameId}/season/${selectedSeason}`)
+      .then((json) => {
+        let goals = json.data;
+        setGoalsForGame(goals);
+      });
   };
 
   const handleSubmit = (e: React.SyntheticEvent) => {
@@ -43,21 +46,27 @@ export const TwoPointLine = () => {
           console.log(data);
           games = data.data;
           let gameMap = games.map((game) => {
-            const homeTeam: Team = createTeam(game.homeTeam);
-            const awayTeam: Team = createTeam(game.awayTeam);
+            const homeTeam: Team = createTeam(
+              game.homeTeamAbbrev,
+              game.score.home,
+            );
+            const awayTeam: Team = createTeam(
+              game.awayTeamAbbrev,
+              game.score.away,
+            );
             const gameToExpand = {
               gameDate: game.gameDate,
               homeTeam: homeTeam,
               awayTeam: awayTeam,
-              key: game.id,
+              key: game.gameId,
             };
             return (
               <GameExpand
                 game={gameToExpand}
-                key={game.id}
+                key={game.gameId}
                 onChange={() => {
-                  setChartKey(game.id);
-                  getGameData(game.id);
+                  setChartKey(game.gameId);
+                  getGameData(game.gameId);
                 }}
               />
             );

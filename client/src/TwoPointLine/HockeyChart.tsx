@@ -20,7 +20,7 @@ export const HockeyChart = (goals: any) => {
     const goalsForGame = goals.goals;
     let homeGoals = goalsForGame.homeTeamGoals.map((goal) => {
       return {
-        name: goal.player,
+        name: goal.playerId,
         x: goal.x,
         y: goal.y,
         distanceFromGoal: goal.distanceFromGoal,
@@ -29,7 +29,7 @@ export const HockeyChart = (goals: any) => {
 
     let awayGoals = goalsForGame.awayTeamGoals.map((goal) => {
       return {
-        name: goal.player,
+        name: goal.playerId,
         x: goal.x,
         y: goal.y,
         distanceFromGoal: goal.distanceFromGoal,
@@ -39,22 +39,22 @@ export const HockeyChart = (goals: any) => {
     let data = {
       datasets: [
         {
-          label: `${goalsForGame.homeTeamAbbrev} Goals`,
+          label: `${goalsForGame.game.homeTeamAbbrev} Goals`,
           data: homeGoals,
           pointRadius: [6],
           fill: false,
           pointHoverBackgroundColor:
-            allTeamColors[goalsForGame.homeTeamAbbrev][0],
-          backgroundColor: allTeamColors[goalsForGame.homeTeamAbbrev][0],
+            allTeamColors[goalsForGame.game.homeTeamAbbrev][0],
+          backgroundColor: allTeamColors[goalsForGame.game.homeTeamAbbrev][0],
         },
         {
-          label: `${goalsForGame.awayTeamAbbrev} Goals`,
+          label: `${goalsForGame.game.awayTeamAbbrev} Goals`,
           data: awayGoals,
           pointRadius: [6],
           fill: false,
           pointHoverBackgroundColor:
-            allTeamColors[goalsForGame.awayTeamAbbrev][0],
-          backgroundColor: allTeamColors[goalsForGame.awayTeamAbbrev][0],
+            allTeamColors[goalsForGame.game.awayTeamAbbrev][0],
+          backgroundColor: allTeamColors[goalsForGame.game.awayTeamAbbrev][0],
         },
       ],
     };

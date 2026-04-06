@@ -1,14 +1,14 @@
-import { allTeamColors } from "../utils/Consts";
+import { allTeamColors, allTeams } from "../utils/Consts";
 import { Play, Player } from "../utils/Types";
 
-export const createTeam = (team: any) => {
+export const createTeam = (abbrev: any, score: any) => {
   return {
-    abbrev: team.abbrev,
-    score: team.score,
-    fullTeamName: `${team.placeName.default} ${team.commonName.default}`,
-    img: team.logo,
-    color: allTeamColors[team.abbrev][0],
-    blackText: allTeamColors[team.abbrev][1],
+    abbrev: abbrev,
+    score: score,
+    fullTeamName: allTeams[abbrev],
+    img: `https://assets.nhle.com/logos/nhl/svg/${abbrev}_light.svg`,
+    color: allTeamColors[abbrev][0],
+    blackText: allTeamColors[abbrev][1],
   };
 };
 
@@ -64,7 +64,7 @@ export const options = {
           const values =
             tooltipData.dataset.data[tooltipData.dataIndex].distanceFromGoal;
 
-          return `${labels}: ${values} from goal`;
+          return `${labels}: ${values} ft from goal`;
         },
         title: function (tooltipData) {
           return tooltipData[0].dataset.data[tooltipData[0].dataIndex].name;

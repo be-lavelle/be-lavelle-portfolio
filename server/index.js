@@ -37,32 +37,51 @@ mongoose
 
 app.get("/deleteDupes/:seasonId", async (req, res) => {
   const season = req.params.seasonId;
-  let isAlreadyInDb = await Game.find({
+  let isGameAlreadyInDb = await Game.find({
     season: season,
   });
-  isAlreadyInDb = isAlreadyInDb.sort((a, b) => {
+  let isGameBreakdownAlreadyInDb = await GameBreakdown.find({
+    "game.season": season,
+  });
+
+  isGameAlreadyInDb = isGameAlreadyInDb.sort((a, b) => {
     return b.gameId - a.gameId;
   });
 
-  let cleanedUpDb = {};
-  isAlreadyInDb.forEach(async (game) => {
-    if (cleanedUpDb.hasOwnProperty(game.gameId)) {
+  let cleanedUpGameDb = {};
+  isGameAlreadyInDb.forEach(async (game) => {
+    if (cleanedUpGameDb.hasOwnProperty(game.gameId)) {
       console.log(`Deleting duplicate Game: ${game.gameId}`);
       await Game.findByIdAndDelete(game._id);
     } else {
-      cleanedUpDb[`${game.gameId}`] = game;
+      cleanedUpGameDb[`${game.gameId}`] = game;
+    }
+  });
+
+  let cleanedUpGameBreakdownDb = {};
+  isGameBreakdownAlreadyInDb.forEach(async (gameBreakdown) => {
+    if (cleanedUpGameBreakdownDb.hasOwnProperty(gameBreakdown.game.gameId)) {
+      console.log(`Deleting duplicate Game: ${gameBreakdown.game.gameId}`);
+      await GameBreakdown.findByIdAndDelete(gameBreakdown._id);
+    } else {
+      cleanedUpGameBreakdownDb[`${gameBreakdown.game.gameId}`] = gameBreakdown;
     }
   });
   res.send({
-    cleanedUpDb: Object.keys(cleanedUpDb).map((gameId) => {
-      cleanedUpDb[gameId];
+    cleanedUpGameDb: Object.keys(cleanedUpGameDb).map((gameId) => {
+      return cleanedUpGameDb[gameId];
     }),
+    cleanedUpGameBreakdownDb: Object.keys(cleanedUpGameBreakdownDb).map(
+      (gameId) => {
+        return cleanedUpGameBreakdownDb[gameId];
+      },
+    ),
   });
 });
 
 app.get("/season/:seasonId/twopointline/:isTwoPointLine", async (req, res) => {
   const season = req.params.seasonId;
-  const isTwoPointLine = req.params.isTwoPointLine;
+  const isTwoPointLine = req.params.isTwoPointLine === "true";
   let teams = Object.fromEntries(
     Object.entries(allTeams).filter(
       ([key, value]) =>
@@ -85,56 +104,87 @@ app.get("/season/:seasonId/twopointline/:isTwoPointLine", async (req, res) => {
         ...isHomeTeamAlreadyInDb,
         ...isAwayTeamAlreadyInDb,
       ];
-      if (isTeamAlreadyInDb.length >= 82) {
+      if (isTeamAlreadyInDb.length >= 75) {
         console.log(
           `Already got all the Team's games, boss - ${team} - ${season}`,
         );
-        return isTeamAlreadyInDb;
+        return { team: team, data: isTeamAlreadyInDb };
+      } else {
+        console.log(
+          `Haven't got this Team's games yet, boss - ${team} - ${season}`,
+        );
+        let regularSeasonGames = await Promise.all(await getRegularSeasonGames(team, season));
+        return { team: team, data: regularSeasonGames };
       }
-      return await getRegularSeasonGames(team, season);
     }),
   );
 
+
   let allGamesUnmapped = {};
-  try {
-    allTeamData.forEach((team) => {
-      team.forEach(async (game) => {
-        const isAlreadyInDb = await GameBreakdown.find({
-          gameId: game.gameId,
+  if (isTwoPointLine) {
+    try {
+      allTeamData.forEach((team) => {
+        let limit = 0;
+        team.forEach(async (game) => {
+          if (limit < 2) {
+            const isAlreadyInDb = await GameBreakdown.find({
+              "game.gameId": game.gameId,
+            });
+            if (isAlreadyInDb.length > 0) {
+              console.log(`Already got the GameBreakdown, boss - ${game.gameId}`);
+            } else if (!allGamesUnmapped.hasOwnProperty(game.id)) {
+              setTimeout(() => getGameData(game.gameId, season), Math.random() * 10000)
+              limit += 1;
+            }
+          }
         });
-        if (isAlreadyInDb.length > 0) {
-          console.log(`Already got the GameBreakdown, boss - ${game.id}`);
-        } else if (!allGamesUnmapped.hasOwnProperty(game.id)) {
-          const gameData = await getGameData(game.gameId, season);
-          console.log("GAME DATA", gameData);
-        }
       });
-    });
-  } catch (error) {
-    console.log(error);
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    let mappedTeamData = mapGamesToPoints(allTeamData)
+
+    let leagueRankings = mapPointsToLeagueRankings(mappedTeamData);
+    let divisionRankings = mapPointsToDivisionRankings(leagueRankings);
+    let conferenceRankings = mapPointsToConferenceRankings(divisionRankings);
+    let wildcardRankings = mapPointsToWildcardRankings(divisionRankings);
+
+    let response = {
+      leagueRankings,
+      divisionRankings,
+      conferenceRankings,
+      wildcardRankings,
+    };
+
+    res.send({ response });
   }
 
-  // console.log(allGameData);
 
-  // let leagueRankings = mapPointsToLeagueRankings(allTeamData);
-  // let divisionRankings = mapPointsToDivisionRankings(leagueRankings);
-  // let conferenceRankings = mapPointsToConferenceRankings(divisionRankings);
-  // let wildcardRankings = mapPointsToWildcardRankings(divisionRankings);
-
-  // let response = {
-  //   leagueRankings,
-  //   divisionRankings,
-  //   conferenceRankings,
-  //   wildcardRankings,
-  // };
-
-  res.send({});
 });
 
 app.get("/team/:teamId/season/:seasonId", async (req, res) => {
   const team = req.params.teamId;
   const season = req.params.seasonId;
-  let teamSchedule = await getRegularSeasonGames(team, season);
+  const isHomeTeamAlreadyInDb = await Game.find({
+    homeTeamAbbrev: team,
+    season: season,
+  });
+  const isAwayTeamAlreadyInDb = await Game.find({
+    awayTeamAbbrev: team,
+    season: season,
+  });
+  const isTeamAlreadyInDb = [
+    ...isHomeTeamAlreadyInDb,
+    ...isAwayTeamAlreadyInDb,
+  ];
+  let teamSchedule = {};
+  if (isTeamAlreadyInDb.length >= 82) {
+    console.log(`Already got all the Team's games, boss - ${team} - ${season}`);
+    teamSchedule = isTeamAlreadyInDb;
+  } else {
+    teamSchedule = await Promise.all(await getRegularSeasonGames(team, season));
+  }
   res.send(teamSchedule);
 });
 
@@ -151,7 +201,6 @@ async function getGameData(gameId, season) {
       "playByPlay",
     )
       .then((response) => {
-        console.log("PLAYBYPLAY RESPONSE", response.body);
         if (!response.ok) {
           if (response.status === 429) {
             console.error("Too many requests - games");
@@ -181,7 +230,7 @@ async function getGameData(gameId, season) {
       });
     return gameData;
   } catch (error) {
-    console.log(error.message);
+    console.log("Other Error", error.message);
   }
 }
 
@@ -202,7 +251,7 @@ async function getRegularSeasonGames(team, season) {
     .then(async (game) => {
       const allTeamGames = getAllRegularSeasonGamesForTeam(game, season);
       try {
-        const mappedGames = allTeamGames.map(async (gameToMap) => {
+        const mappedGames = await allTeamGames.map(async (gameToMap) => {
           const isAlreadyInDb = await Game.find({
             gameId: gameToMap.gameId,
           });
@@ -234,7 +283,6 @@ async function getRegularSeasonGames(team, season) {
         throw error;
       }
     });
-
   return teamSchedule;
 }
 
