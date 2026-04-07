@@ -9,6 +9,7 @@ import {
   mapPointsToDivisionRankings,
   mapPointsToConferenceRankings,
   mapPointsToWildcardRankings,
+  mapRankingsByDate,
 } from "./adapters/standingsAdapter.js";
 
 import { getAllRegularSeasonGamesForTeam } from "./adapters/gamesAdapter.js";
@@ -169,24 +170,10 @@ app.get("/season/:seasonId/", async (req, res) => {
     ))
     const mappedTeamData = mapGamesToPoints(allGameBreakdowns, true)
     const leagueRankings = mapPointsToLeagueRankings(mappedTeamData);
-    const originalLeagueRankings = leagueRankings.originalSorted
-    const twoPointLineLeagueRankings = leagueRankings.twoPointLineSorted
-    const originalDivisionRankings = mapPointsToDivisionRankings(originalLeagueRankings);
-    const twoPointLineDivisionRankings = mapPointsToDivisionRankings(twoPointLineLeagueRankings);
-    const originalConferenceRankings = mapPointsToConferenceRankings(originalDivisionRankings);
-    const twoPointLineConferenceRankings = mapPointsToConferenceRankings(twoPointLineDivisionRankings);
-    const originalWildcardRankings = mapPointsToWildcardRankings(originalDivisionRankings);
-    const twoPointLineWildcardRankings = mapPointsToWildcardRankings(twoPointLineDivisionRankings);
+    const mappedRankingsByDate = mapRankingsByDate(leagueRankings)
 
     let response = {
-      originalLeagueRankings,
-      twoPointLineLeagueRankings,
-      originalDivisionRankings,
-      twoPointLineDivisionRankings,
-      originalConferenceRankings,
-      twoPointLineConferenceRankings,
-      originalWildcardRankings,
-      twoPointLineWildcardRankings
+      mappedRankingsByDate
     };
 
     res.send({ response });
