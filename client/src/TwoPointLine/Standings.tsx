@@ -9,7 +9,7 @@ export const Standings = () => {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     axios
-      .get(`http://localhost:8080/season/${selectedSeason}/twopointline/false`)
+      .get(`http://localhost:8080/season/${selectedSeason}/`)
       .then((data) => {
         console.log(data);
       });

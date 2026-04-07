@@ -129,45 +129,95 @@ export function getGameBreakdown(json, season) {
   };
 }
 
-export function mapGamesToPoints(teamGames) {
+export function mapGamesToPoints(teamGames, isGameBreakdown = false) {
   let allMappedTeamData = []
   teamGames.forEach((team) => {
-    let points = 0;
     let totalPossiblePoints = 0;
-    let regulationWins = 0;
-    let regulationAndOvertimeWins = 0;
-    let totalWins = 0;
-    let teamName = team.team
-    team.data.forEach((game) => {
-      let isOvertime = game.isOvertime
-      let isShootout = game.isShootout
-      console.log("GAME", game)
-      let gameResult = 0;
-      if (game.homeTeamAbbrev === teamName) {
-        gameResult = getResultOfGame(game.score.home, game.score.away, isOvertime);
-        points += gameResult;
-      } else {
-        gameResult = getResultOfGame(game.score.away, game.score.home, isOvertime);
-        points += gameResult;
-      }
-      regulationWins += gameResult === 2 && !isOvertime ? 1 : 0;
-      regulationAndOvertimeWins += gameResult === 2 && !isShootout ? 1 : 0;
-      totalWins += gameResult === 2 ? 1 : 0;
-      totalPossiblePoints += 2;
-    });
-    let pointsPercentage =
-      Math.floor(Math.round(1000 * (points / totalPossiblePoints))) / 1000;
 
-    let mappedTeamData = {
+    let originalPoints = 0;
+    let originalRegulationWins = 0;
+    let originalRegulationAndOvertimeWins = 0;
+    let originalTotalWins = 0;
+    let twoPointLinePoints = 0;
+    let twoPointLineRegulationWins = 0;
+    let twoPointLineRegulationAndOvertimeWins = 0;
+    let twoPointLineTotalWins = 0;
+    let teamName = team.team
+    let pointsAtGameDate = {}
+    let sortedTeamGames = team.data.sort((a, b) => {
+      return a.game.gameId - b.game.gameId
+    })
+    sortedTeamGames.forEach((game) => {
+      let originalGame = {}
+      if (isGameBreakdown) {
+        originalGame = game.game
+      } else {
+        originalGame = game
+      }
+      const isOriginallyOvertime = originalGame.isOvertime
+      const isOriginallyShootout = originalGame.isShootout
+      const isTwoPointLineOvertime = game.resultWithTwoPointLine.home === "OTL" || game.resultWithTwoPointLine.away === "OTL"
+      const isTwoPointLineShootout = isOriginallyShootout && isTwoPointLineOvertime
+      let originalGamePoints = 0;
+      let twoPointLineGamePoints = 0;
+      if (originalGame.homeTeamAbbrev === teamName) {
+        originalGamePoints = getResultOfGame(originalGame.score.home, originalGame.score.away, isOriginallyOvertime);
+        twoPointLineGamePoints = getResultOfGame(game.scoreWithTwoPointLine.home, game.scoreWithTwoPointLine.away, isTwoPointLineOvertime);
+        originalPoints += originalGamePoints;
+        twoPointLinePoints += twoPointLineGamePoints
+      } else {
+        originalGamePoints = getResultOfGame(originalGame.score.away, originalGame.score.home, isOriginallyOvertime);
+        twoPointLineGamePoints = getResultOfGame(game.scoreWithTwoPointLine.away, game.scoreWithTwoPointLine.home, isTwoPointLineOvertime);
+        originalPoints += originalGamePoints;
+        twoPointLinePoints += twoPointLineGamePoints
+      }
+      originalRegulationWins += originalGamePoints === 2 && !isOriginallyOvertime ? 1 : 0;
+      twoPointLineRegulationWins += twoPointLineGamePoints === 2 && !isTwoPointLineOvertime ? 1 : 0;
+      originalRegulationAndOvertimeWins += originalGamePoints === 2 && !isOriginallyShootout ? 1 : 0;
+      twoPointLineRegulationAndOvertimeWins += twoPointLineGamePoints === 2 && !isTwoPointLineShootout ? 1 : 0;
+      originalTotalWins += originalGamePoints === 2 ? 1 : 0;
+      twoPointLineTotalWins += twoPointLineGamePoints === 2 ? 1 : 0;
+      totalPossiblePoints += 2;
+
+      let currentOriginalPointsPercentage = Math.floor(Math.round(1000 * (originalPoints / totalPossiblePoints))) / 1000;
+      let currentTwoPointLinePointsPercentage = Math.floor(Math.round(1000 * (twoPointLinePoints / totalPossiblePoints))) / 1000;
+      let pointsDataAtGameDate = {
+        originalPoints,
+        originalPointsPercentage: currentOriginalPointsPercentage,
+        originalRegulationWins,
+        originalRegulationAndOvertimeWins: originalRegulationAndOvertimeWins,
+        originalTotalWins,
+        twoPointLinePoints,
+        twoPointLinePointsPercentage: currentTwoPointLinePointsPercentage,
+        twoPointLineRegulationWins,
+        twoPointLineRegulationAndOvertimeWins,
+        twoPointLineTotalWins,
+        totalPossiblePoints,
+      }
+      pointsAtGameDate[originalGame.gameDate] = pointsDataAtGameDate
+    });
+    const originalPointsPercentage =
+      Math.floor(Math.round(1000 * (originalPoints / totalPossiblePoints))) / 1000;
+
+    const twoPointLinePointsPercentage =
+      Math.floor(Math.round(1000 * (twoPointLinePoints / totalPossiblePoints))) / 1000;
+
+    const mappedTeamData = {
       team: {
         teamName,
         division: allTeams[teamName].division
       },
-      points,
-      pointsPercentage: pointsPercentage,
-      regulationWins: regulationWins,
-      regulationAndOvertimeWins: regulationAndOvertimeWins,
-      totalWins: totalWins,
+      pointsAtGameDate,
+      originalPoints,
+      originalPointsPercentage,
+      originalRegulationWins,
+      originalRegulationAndOvertimeWins,
+      originalTotalWins,
+      twoPointLinePoints,
+      twoPointLinePointsPercentage,
+      twoPointLineRegulationWins,
+      twoPointLineRegulationAndOvertimeWins,
+      twoPointLineTotalWins,
     }
     allMappedTeamData.push(mappedTeamData)
   })
@@ -175,14 +225,14 @@ export function mapGamesToPoints(teamGames) {
 }
 
 export function mapPointsToLeagueRankings(allTeamPoints) {
-  const sorted = allTeamPoints.sort(sortPointsRankings()).filter((x) => x);
-  return sorted;
+  const originalSorted = allTeamPoints.sort(sortOriginalPointsRankings()).filter((x) => x);
+  const twoPointLineSorted = allTeamPoints.sort(sortTwoPointLinePointsRankings()).filter((x) => x)
+  return { originalSorted, twoPointLineSorted };
 }
 
 export function mapPointsToDivisionRankings(leagueRankings) {
   if (leagueRankings) {
     let pacific = leagueRankings.filter((team) => {
-      console.log("TEAM", team);
       return team.team.division === "Pacific";
     });
     let atlantic = leagueRankings.filter((team) => {
@@ -203,9 +253,9 @@ export function mapPointsToConferenceRankings(divisionRankings) {
   let eastern = [
     ...divisionRankings.atlantic,
     ...divisionRankings.metropolitan,
-  ].sort(sortPointsRankings());
+  ].sort(sortOriginalPointsRankings());
   let western = [...divisionRankings.pacific, ...divisionRankings.central].sort(
-    sortPointsRankings(),
+    sortOriginalPointsRankings(),
   );
   return {
     eastern,
@@ -224,10 +274,10 @@ export function mapPointsToWildcardRankings(divisionRankings) {
   const restOfCentral = divisionRankings.central.slice(3);
 
   const restOfEast = [...restOfAtlantic, ...restOfMetropolitan].sort(
-    sortPointsRankings(),
+    sortOriginalPointsRankings(),
   );
   const restOfWest = [...restOfPacific, ...restOfCentral].sort(
-    sortPointsRankings(),
+    sortOriginalPointsRankings(),
   );
 
   return {
@@ -242,24 +292,46 @@ export function mapPointsToWildcardRankings(divisionRankings) {
   };
 }
 
-function sortPointsRankings() {
+function sortOriginalPointsRankings() {
   return function (a, b) {
-    if (b.points === a.points) {
-      if (b.pointsPercentage === a.pointsPercentage) {
-        if (b.regulationWins === a.regulationWins) {
-          if (b.regulationAndOvertimeWins === a.regulationAndOvertimeWins) {
-            return b.totalWins - a.totalWins;
+    if (b.originalPoints === a.originalPoints) {
+      if (b.originalPointsPercentage === a.originalPointsPercentage) {
+        if (b.originalRegulationWins === a.originalRegulationWins) {
+          if (b.originalRegulationAndOvertimeWins === a.originalRegulationAndOvertimeWins) {
+            return b.originalTotalWins - a.originalTotalWins;
           } else {
-            return b.regulationAndOvertimeWins - a.regulationAndOvertimeWins;
+            return b.originalRegulationAndOvertimeWins - a.originalRegulationAndOvertimeWins;
           }
         } else {
-          return b.regulationWins - a.regulationWins;
+          return b.originalRegulationWins - a.originalRegulationWins;
         }
       } else {
-        return b.pointsPercentage - a.pointsPercentage;
+        return b.originalPointsPercentage - a.originalPointsPercentage;
       }
     } else {
-      return b.points - a.points;
+      return b.originalPoints - a.originalPoints;
+    }
+  };
+}
+
+function sortTwoPointLinePointsRankings() {
+  return function (a, b) {
+    if (b.twoPointLinePoints === a.twoPointLinePoints) {
+      if (b.twoPointLinePointsPercentage === a.twoPointLinePointsPercentage) {
+        if (b.twoPointLineRegulationWins === a.twoPointLineRegulationWins) {
+          if (b.twoPointLineRegulationAndOvertimeWins === a.twoPointLineRegulationAndOvertimeWins) {
+            return b.twoPointLineTotalWins - a.twoPointLineTotalWins;
+          } else {
+            return b.twoPointLineRegulationAndOvertimeWins - a.twoPointLineRegulationAndOvertimeWins;
+          }
+        } else {
+          return b.twoPointLineRegulationWins - a.twoPointLineRegulationWins;
+        }
+      } else {
+        return b.twoPointLinePointsPercentage - a.twoPointLinePointsPercentage;
+      }
+    } else {
+      return b.twoPointLinePoints - a.twoPointLinePoints;
     }
   };
 }
@@ -267,7 +339,7 @@ function sortPointsRankings() {
 function getResultOfGame(ourTeamScore, otherTeamScore, isOT) {
   if (ourTeamScore > otherTeamScore) {
     return 2;
-  } else if (isOT) {
+  } else if (isOT || (ourTeamScore === otherTeamScore)) {
     return 1;
   } else {
     return 0;
