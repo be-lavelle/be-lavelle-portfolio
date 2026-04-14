@@ -234,16 +234,16 @@ export function mapPointsToDivisionRankings(leagueRankings) {
   if (leagueRankings) {
     let pacific = leagueRankings.filter((team) => {
       return allTeams[team.teamName].division === "Pacific";
-    });
+    }).sort(sortOriginalPointsRankings()).filter((x) => x)
     let atlantic = leagueRankings.filter((team) => {
       return allTeams[team.teamName].division === "Atlantic";
-    });
+    }).sort(sortOriginalPointsRankings()).filter((x) => x)
     let central = leagueRankings.filter((team) => {
       return allTeams[team.teamName].division === "Central";
-    });
+    }).sort(sortOriginalPointsRankings()).filter((x) => x)
     let metropolitan = leagueRankings.filter((team) => {
       return allTeams[team.teamName].division === "Metropolitan";
-    });
+    }).sort(sortOriginalPointsRankings()).filter((x) => x)
     return { pacific, central, atlantic, metropolitan };
   }
   return {};

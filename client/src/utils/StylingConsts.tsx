@@ -32,6 +32,11 @@ export const gridAbbrevItemStyle = {
   display: "flex",
 };
 
+export const standingsTypeGridItem = {
+  ...gridAbbrevItemStyle,
+  border: 1,
+}
+
 export const chipScoreStyle = (team: Team) => {
   return {
     fontWeight: 900,

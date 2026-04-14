@@ -103,7 +103,7 @@ app.get("/season/:seasonId/", async (req, res) => {
         ...isHomeTeamAlreadyInDb,
         ...isAwayTeamAlreadyInDb,
       ];
-      if (isTeamAlreadyInDb.length >= 82 || (season === "20252026" && isTeamAlreadyInDb.length >= 76)) {
+      if (isTeamAlreadyInDb.length >= 82 || (season === "20252026" && isTeamAlreadyInDb.length >= 79)) {
         console.log(
           `Already got all the Team's games, boss - ${team} - ${season}`,
         );
@@ -172,11 +172,7 @@ app.get("/season/:seasonId/", async (req, res) => {
     const leagueRankings = mapPointsToLeagueRankings(mappedTeamData);
     const mappedRankingsByDate = mapRankingsByDate(leagueRankings)
 
-    let response = {
-      mappedRankingsByDate
-    };
-
-    res.send({ response });
+    res.send({ mappedRankingsByDate });
   } catch (error) {
     console.log(error);
   }

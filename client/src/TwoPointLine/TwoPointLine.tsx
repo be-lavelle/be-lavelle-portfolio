@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { GameExpand } from "./GameExpand";
 import { Team } from "../utils/Types";
-import { createTeam, mapGoals } from "./DataAdapter";
+import { createTeam } from "./DataAdapter";
 import {
   Box,
   FormControl,
@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import { allTeams, seasons } from "../utils/Consts";
 import { HockeyChart } from "./HockeyChart";
-import { log } from "console";
 
 export const TwoPointLine = () => {
   let games = [];

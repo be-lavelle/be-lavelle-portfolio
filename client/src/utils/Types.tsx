@@ -50,3 +50,20 @@ export type Play = {
   isShotOrGoal: string;
   is2PtGoal: boolean;
 };
+
+export type Standings = {
+  id: number;
+  team: string;
+  points: number;
+  pointsPercentage: number;
+  regulationWins: number;
+  regulationAndOvertimeWins: number;
+  totalWins: number;
+}
+
+export enum RankingsType {
+  Wildcard = "Wildcard",
+  Division = "Division",
+  Conference = "Conference",
+  League = "League"
+} 

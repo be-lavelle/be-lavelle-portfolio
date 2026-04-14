@@ -1,4 +1,6 @@
-import { RegexesType } from "./Types";
+import { GridColDef } from "@mui/x-data-grid";
+import React from "react";
+import { RegexesType, Standings } from "./Types";
 
 export const regexes: RegexesType = {
   name: { regex: /^.{1,100}$/, errorMessage: "Please enter a name" },
@@ -90,3 +92,123 @@ export const allTeamColors = {
   WPG: ["#041E41", false],
   WSH: ["#CF0A2B", false],
 };
+
+export const defaultStandings = {
+  "originalLeagueRankings": [],
+  "twoPointLineLeagueRankings": [],
+  "originalDivisionRankings": {
+    "pacific": [],
+    "central": [],
+    "atlantic": [],
+    "metropolitan": []
+  },
+  "twoPointLineDivisionRankings": {
+    "pacific": [],
+    "central": [],
+    "atlantic": [],
+    "metropolitan": []
+  },
+  "originalConferenceRankings": {
+    "eastern": [],
+    "western": [],
+  },
+  "twoPointLineConferenceRankings": {
+    "eastern": [],
+    "western": [],
+  },
+  "originalWildcardRankings": {
+    "top3Atlantic": [],
+    "top3Central": [],
+    "top3Metropolitan": [],
+    "top3Pacific": [],
+    "eastWildcards": [],
+    "westWildcards": [],
+    "restOfEast": [],
+    "restOfWest": []
+  },
+  "twoPointLineWildcardRankings": {
+    "top3Atlantic": [],
+    "top3Central": [],
+    "top3Metropolitan": [],
+    "top3Pacific": [],
+    "eastWildcards": [],
+    "westWildcards": [],
+    "restOfEast": [],
+    "restOfWest": []
+  }
+}
+
+export const defaultStandingsColumns: GridColDef<Standings>[] = [
+  {
+    field: 'id', headerName: 'Rank', width: 50,
+    align: 'center',
+    headerAlign: 'center',
+    headerClassName: 'data-grid-header',
+  },
+  {
+    field: 'team', headerName: 'Team', width: 100,
+    display: "flex",
+    align: 'center',
+    headerAlign: 'center',
+    headerClassName: 'data-grid-header',
+    renderCell: (params) => <><img width="40px" src={`https://assets.nhle.com/logos/nhl/svg/${params.value}_light.svg`} /> {params.value}</>, // renderCell will render the component
+  },
+  {
+    field: 'points',
+    headerName: 'Points',
+    flex: 1,
+    minWidth: 100,
+    align: 'center',
+    headerAlign: 'center',
+    headerClassName: 'data-grid-header',
+  },
+  {
+    field: 'pointsPercentage',
+    headerName: 'Points %',
+    flex: 1,
+    minWidth: 100,
+    align: 'center',
+    headerAlign: 'center',
+    headerClassName: 'data-grid-header',
+  },
+  {
+    field: 'regulationWins',
+    headerName: 'RW',
+    description: 'Regulation wins',
+    flex: 1,
+    minWidth: 100,
+    align: 'center',
+    headerAlign: 'center',
+    headerClassName: 'data-grid-header',
+  },
+  {
+    field: 'regulationAndOvertimeWins',
+    headerName: 'ROW',
+    description: 'Regulation and overtime wins',
+    flex: 1,
+    minWidth: 100,
+    align: 'center',
+    headerAlign: 'center',
+    headerClassName: 'data-grid-header',
+  },
+  {
+    field: 'totalWins',
+    headerName: 'TW',
+    description: 'Total Wins',
+    flex: 1,
+    minWidth: 100,
+    align: 'center',
+    headerAlign: 'center',
+    headerClassName: 'data-grid-header',
+  },
+];
+
+export const defaultStandingsRows = [{
+  id: 1,
+  team: "N/A",
+  points: 0,
+  pointsPercentage: 0,
+  regulationWins: 0,
+  regulationAndOvertimeWins: 0,
+  totalWins: 0
+}]
