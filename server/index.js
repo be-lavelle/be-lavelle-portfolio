@@ -29,7 +29,8 @@ mongoose
       console.log("server listening on port 8080");
     });
   })
-  .catch(() => {
+  .catch((error) => {
+    console.log(error.message)
     console.error("database connection failed");
   });
 
