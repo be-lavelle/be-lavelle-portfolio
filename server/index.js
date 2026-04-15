@@ -6,12 +6,9 @@ import {
   getGameBreakdown,
   mapGamesToPoints,
   mapPointsToLeagueRankings,
-  mapPointsToDivisionRankings,
-  mapPointsToConferenceRankings,
-  mapPointsToWildcardRankings,
   mapRankingsByDate,
 } from "./adapters/standingsAdapter.js";
-
+import 'dotenv/config'
 import { getAllRegularSeasonGamesForTeam } from "./adapters/gamesAdapter.js";
 
 import "./loadEnvironment.js";
@@ -20,10 +17,11 @@ import { GameBreakdown, Game } from "./models/gameBreakdown.model.js";
 
 app.use(cors());
 app.use(express.json());
+const mongoDBURL = process.env.MONGODB_URI;
 
 mongoose
   .connect(
-    "",
+    mongoDBURL,
   )
   .then(() => {
     console.log("Connected to db");
