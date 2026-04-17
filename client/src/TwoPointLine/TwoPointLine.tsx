@@ -28,7 +28,7 @@ export const TwoPointLine = () => {
 
   const getGameData = (gameId: string) => {
     axios
-      .get(`http://localhost:8080/game/${gameId}/season/${selectedSeason}`)
+      .get(`${process.env.REACT_APP_BACKEND_URI}/game/${gameId}/season/${selectedSeason}`)
       .then((json) => {
         let goals = json.data;
         setGoalsForGame(goals);
@@ -39,7 +39,7 @@ export const TwoPointLine = () => {
     if (selectedSeason !== "" && selectedTeam !== "") {
       axios
         .get(
-          `http://localhost:8080/team/${selectedTeam}/season/${selectedSeason}`,
+          `${process.env.REACT_APP_BACKEND_URI}/team/${selectedTeam}/season/${selectedSeason}`,
         )
         .then((data) => {
           console.log(data);

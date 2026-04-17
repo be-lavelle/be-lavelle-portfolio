@@ -24,7 +24,7 @@ export const Standings = () => {
 
   const handleSubmitDelete = (e: React.SyntheticEvent) => {
     axios
-      .get(`http://localhost:8080/deleteDupes/${selectedSeason}`)
+      .get(`${process.env.REACT_APP_BACKEND_URI}/deleteDupes/${selectedSeason}`)
       .then((data) => {
         console.log(data);
       });
@@ -42,7 +42,7 @@ export const Standings = () => {
     console.log(e.target.value);
     setSelectedSeason(e.target.value);
     axios
-      .get(`http://localhost:8080/season/${e.target.value}/`)
+      .get(`${process.env.REACT_APP_BACKEND_URI}/season/${e.target.value}/`)
       .then((json) => {
         let standingsByDate = json.data.mappedRankingsByDate;
         console.log(standingsByDate)

@@ -82,11 +82,11 @@ export const Contact = () => {
     };
     emailjs
       .send(
-        process.env.REACT_APP_SERVICE_KEY,
-        process.env.REACT_APP_TEMPLATE_KEY,
+        process.env.REACT_APP_SERVICE_KEY ?? "",
+        process.env.REACT_APP_TEMPLATE_KEY ?? "",
         templateParams,
         {
-          publicKey: process.env.REACT_APP_PUBLIC_KEY,
+          publicKey: process.env.REACT_APP_PUBLIC_KEY ?? "",
         },
       )
       .then(
