@@ -102,7 +102,7 @@ app.get("/season/:seasonId/", async (req, res) => {
         ...isHomeTeamAlreadyInDb,
         ...isAwayTeamAlreadyInDb,
       ];
-      if (isTeamAlreadyInDb.length >= 82 || (season === "20252026" && isTeamAlreadyInDb.length >= 79)) {
+      if (isTeamAlreadyInDb.length >= 82) {
         console.log(
           `Already got all the Team's games, boss - ${team} - ${season}`,
         );
