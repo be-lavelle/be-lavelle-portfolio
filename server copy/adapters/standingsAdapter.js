@@ -377,8 +377,8 @@ export function mapRankingsByDate(leagueRankings) {
 
   let allDatesWithAllRankings = {}
   sortedKeys.forEach((date) => {
-    const originalLeagueRankings = allDatesWithLeagueRankings[date].originalTeamData.sort(sortOriginalPointsRankings())
-    const twoPointLineLeagueRankings = allDatesWithLeagueRankings[date].twoPointTeamData.sort(sortTwoPointLinePointsRankings())
+    const originalLeagueRankings = allDatesWithLeagueRankings[date].originalTeamData
+    const twoPointLineLeagueRankings = allDatesWithLeagueRankings[date].twoPointTeamData
     const originalDivisionRankings = mapPointsToDivisionRankings(originalLeagueRankings)
     const twoPointLineDivisionRankings = mapPointsToDivisionRankings(twoPointLineLeagueRankings)
     const originalConferenceRankings = mapPointsToConferenceRankings(originalDivisionRankings)

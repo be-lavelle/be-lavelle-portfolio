@@ -66,4 +66,9 @@ export enum RankingsType {
   Division = "Division",
   Conference = "Conference",
   League = "League"
-} 
+}
+
+export type StandingsProps = {
+  standings: any,
+  loading: boolean
+}

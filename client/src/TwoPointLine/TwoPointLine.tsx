@@ -96,7 +96,7 @@ export const TwoPointLine = () => {
   return (
     <div>
       <Typography variant="h4" sx={h4Style}>
-        Two Point Line
+        Game Breakdowns
       </Typography>
       <Toolbar>
         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">

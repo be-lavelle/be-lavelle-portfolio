@@ -78,8 +78,6 @@ app.get("/deleteDupes/:seasonId", async (req, res) => {
   });
 });
 
-
-// TODO look at league sorting, why BUF above DAL
 app.get("/season/:seasonId/", async (req, res) => {
   const season = req.params.seasonId;
   let teams = Object.fromEntries(

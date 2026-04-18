@@ -19,7 +19,7 @@ const App = () => {
       <Container sx={{ marginTop: 4 }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/two-point-line" element={<TwoPointLine />} />
+          <Route path="/game-breakdowns" element={<TwoPointLine />} />
           <Route path="/standings" element={<Standings />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<Contact />} />

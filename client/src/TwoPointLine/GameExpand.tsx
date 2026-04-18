@@ -54,9 +54,6 @@ export const GameExpand = (gameExpandController: GameExpandController) => {
           <TeamScoreChip {...gameExpandController.game.awayTeam} />
         </Grid>
       </AccordionSummary>
-      <AccordionDetails>
-        <Typography>BLEP</Typography>
-      </AccordionDetails>
     </Accordion>
   );
 };

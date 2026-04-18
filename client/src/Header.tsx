@@ -17,7 +17,7 @@ const Header = () => {
 
         <Box sx={toolbarBoxStyle}>
           <MenuButton to="/standings" name="Standings" />
-          <MenuButton to="/two-point-line" name="2-Point Line" />
+          <MenuButton to="/game-breakdowns" name="Game Breakdowns" />
           <MenuButton to="/about" name="About" />
           <MenuButton to="/contact" name="Contact" />
         </Box>

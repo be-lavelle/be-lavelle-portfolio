@@ -3,13 +3,16 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Box, Grid, Typography } from "@mui/material";
 import { defaultStandingsColumns, defaultStandingsRows } from "../utils/Consts";
 import { mapStandings } from "../utils/Utils";
+import { StandingsProps } from "../utils/Types";
 
 
-export const WildcardStandings = (leagueStandings: any) => {
-    console.log(leagueStandings);
-
-    if (leagueStandings.standings.hasOwnProperty("originalWildcardRankings")) {
-        const { originalWildcardRankings } = leagueStandings.standings
+export const WildcardStandings: React.FC<StandingsProps> = ({ standings, loading }) => {
+    console.log(standings);
+    if (!standings) {
+        return null
+    }
+    if (standings.hasOwnProperty("originalWildcardRankings")) {
+        const { originalWildcardRankings } = standings
 
         if (originalWildcardRankings.top3Pacific.length > 0) {
             const columns = defaultStandingsColumns;
@@ -58,9 +61,10 @@ export const WildcardStandings = (leagueStandings: any) => {
             return (
                 <Grid container spacing={1} width={"auto"} >
                     <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography>Western Wildcards</Typography>
+                        <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>Western Wildcard Standings</Typography>
                         <Box sx={{ height: 400, width: '100%' }}>
                             <DataGrid
+                                loading={loading}
                                 rows={allWest}
                                 columns={columns}
                                 initialState={{
@@ -71,9 +75,10 @@ export const WildcardStandings = (leagueStandings: any) => {
                         </ Box>
                     </Grid>
                     <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography>Atlantic Wildcard</Typography>
+                        <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>Eastern Wildcard Standings</Typography>
                         <Box sx={{ height: 400, width: '100%' }}>
                             <DataGrid
+                                loading={loading}
                                 rows={allEast}
                                 columns={columns}
                                 initialState={{
@@ -92,9 +97,10 @@ export const WildcardStandings = (leagueStandings: any) => {
             return (
                 <Grid container spacing={1} width={"auto"} >
                     <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography>Western Wildcard</Typography>
+                        <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>Western Wildcard Standings</Typography>
                         <Box sx={{ height: 400, width: '100%' }}>
                             <DataGrid
+                                loading={loading}
                                 rows={rows}
                                 columns={columns}
                                 initialState={{
@@ -106,8 +112,9 @@ export const WildcardStandings = (leagueStandings: any) => {
                     </Grid>
                     <Grid size={{ sm: 12, md: 6, lg: 6 }}>
                         <Box sx={{ height: 400, width: '100%' }}>
-                            <Typography>Eastern Wildcard</Typography>
+                            <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>Eastern Wildcard Standings</Typography>
                             <DataGrid
+                                loading={loading}
                                 rows={rows}
                                 columns={columns}
                                 initialState={{

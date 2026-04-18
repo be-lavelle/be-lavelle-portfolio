@@ -13,22 +13,42 @@ import { gridAbbrevItemStyle, standingsTypeGridItem } from "../utils/StylingCons
 import { ConferenceStandings } from "./ConferenceStandings";
 import { DivisionStandings } from "./DivisionStandings";
 import { WildcardStandings } from "./WildcardStandings";
+import { log } from "console";
 
 export const Standings = () => {
-  const [selectedSeason, setSelectedSeason] = React.useState("");
+  const [selectedSeason, setSelectedSeason] = React.useState("20252026");
   const [allStandings, setAllStandings] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
   const [currentStandings, setCurrentStandings] = React.useState(defaultStandings);
   const [standingsType, setStandingsType] = React.useState(RankingsType.League);
   const [selectedDate, setSelectedDate] = React.useState<string | null>(dayjs().format("YYYY-MM-DD").toString());
   const [defaultDate, setDefaultDate] = React.useState<Dayjs | null>(dayjs());
 
-  const handleSubmitDelete = (e: React.SyntheticEvent) => {
+  useEffect(() => {
+    setLoading(true)
     axios
       .get(`${process.env.REACT_APP_BACKEND_URI}/deleteDupes/${selectedSeason}`)
       .then((data) => {
-        console.log(data);
+        axios
+          .get(`${process.env.REACT_APP_BACKEND_URI}/season/${selectedSeason}/`)
+          .then((json) => {
+            setLoading(false)
+            let standingsByDate = json.data.mappedRankingsByDate;
+            console.log(standingsByDate)
+            setAllStandings(standingsByDate);
+            if (standingsByDate.hasOwnProperty(selectedDate)) {
+              setCurrentStandings(standingsByDate[selectedDate])
+            } else {
+              let keys = Object.keys(standingsByDate)
+              console.log(keys)
+              const finalKey = keys[keys.length - 1]
+              setCurrentStandings(standingsByDate[finalKey])
+              setSelectedDate(finalKey)
+              setDefaultDate(dayjs(finalKey))
+            }
+          });
       });
-  };
+  }, [selectedSeason])
 
   const dropdownSeasons = Object.keys(seasons).map((season) => {
     return (
@@ -41,22 +61,6 @@ export const Standings = () => {
   const handleOnChangeSeason = (e: React.ChangeEvent<{ value: string }>) => {
     console.log(e.target.value);
     setSelectedSeason(e.target.value);
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URI}/season/${e.target.value}/`)
-      .then((json) => {
-        let standingsByDate = json.data.mappedRankingsByDate;
-        console.log(standingsByDate)
-        setAllStandings(standingsByDate);
-        if (standingsByDate.hasOwnProperty(selectedDate)) {
-          setCurrentStandings(standingsByDate[selectedDate])
-        } else {
-          let keys = Object.keys(standingsByDate)
-          const finalKey = keys[keys.length - 1]
-          setCurrentStandings(standingsByDate[finalKey])
-          setSelectedDate(finalKey)
-          setDefaultDate(dayjs(finalKey))
-        }
-      });
   };
 
   const handleOnChangeType = (e: React.SyntheticEvent, type: RankingsType) => {
@@ -72,6 +76,8 @@ export const Standings = () => {
         setSelectedDate(date)
       } else {
         setCurrentStandings(allStandings[finalKey])
+        setSelectedDate(finalKey)
+        setDefaultDate(dayjs(finalKey))
       }
     }
   }
@@ -80,38 +86,36 @@ export const Standings = () => {
     <div>
       <Grid container spacing={1} width={"auto"}>
         <Grid size={{ sm: 4, md: 4, lg: 4 }} sx={gridAbbrevItemStyle}>
-          <NativeSelect defaultValue={"Pick Season"} onChange={handleOnChangeSeason} sx={{ width: "100%" }}>
-            <option value={"Pick Season"} disabled>Pick Season</option>
+          <NativeSelect defaultValue={"20252026"} onChange={handleOnChangeSeason} sx={{ width: "100%" }}>
+            <option value={"20252026"} disabled>2025-2026</option>
             {dropdownSeasons}
           </NativeSelect>
         </Grid>
         {Object.keys(allStandings).length > 0 && <Grid size={{ sm: 4, md: 4, lg: 4 }} sx={gridAbbrevItemStyle}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker label="Standings on date" defaultValue={defaultDate} onChange={(newValue) => handleOnChangeDate(newValue.format("YYYY-MM-DD").toString())} sx={{ width: "200px" }} />
-          </LocalizationProvider>        </Grid>
-        }
-        <Grid size={{ sm: 4, md: 4, lg: 4 }} sx={gridAbbrevItemStyle}>
-          <Button onClick={handleSubmitDelete}>Delete Dupes</Button>
+            <DatePicker label="Standings on date" defaultValue={defaultDate} value={dayjs(selectedDate)} onChange={(newValue) => handleOnChangeDate(newValue.format("YYYY-MM-DD").toString())} sx={{ width: "200px" }} />
+          </LocalizationProvider>
         </Grid>
+        }
       </Grid>
       {Object.keys(allStandings).length > 0 && <Grid container width={"auto"} margin="20px 0 0" justifyContent="center">
         <Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Wildcard)}>Wildcard</Button>
+          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Wildcard)} sx={{ width: "100%" }}>Wildcard</Button>
         </Grid>
         <Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Division)}>Division</Button>
+          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Division)} sx={{ width: "100%" }}>Division</Button>
         </Grid>
         <Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Conference)}>Conference</Button>
+          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Conference)} sx={{ width: "100%" }}>Conference</Button>
         </Grid><Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.League)}>League</Button>
+          <Button onClick={(e) => handleOnChangeType(e, RankingsType.League)} sx={{ width: "100%" }}>League</Button>
         </Grid>
       </Grid>}
       <Box>
-        {standingsType === RankingsType.League && <LeagueStandings standings={currentStandings} />}
-        {standingsType === RankingsType.Conference && <ConferenceStandings standings={currentStandings} />}
-        {standingsType === RankingsType.Division && <DivisionStandings standings={currentStandings} />}
-        {standingsType === RankingsType.Wildcard && <WildcardStandings standings={currentStandings} />}
+        {standingsType === RankingsType.League && <LeagueStandings standings={currentStandings} loading={loading} />}
+        {standingsType === RankingsType.Conference && <ConferenceStandings standings={currentStandings} loading={loading} />}
+        {standingsType === RankingsType.Division && <DivisionStandings standings={currentStandings} loading={loading} />}
+        {standingsType === RankingsType.Wildcard && <WildcardStandings standings={currentStandings} loading={loading} />}
       </Box>
     </div>
   );

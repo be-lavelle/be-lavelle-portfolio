@@ -1,20 +1,25 @@
 import React from "react";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { defaultStandingsColumns, defaultStandingsRows } from "../utils/Consts";
 import { mapStandings } from "../utils/Utils";
+import { StandingsProps } from "../utils/Types";
 
-export const LeagueStandings = (leagueStandings: any) => {
-
-    if (leagueStandings.standings.hasOwnProperty("originalLeagueRankings")) {
-        const { originalLeagueRankings } = leagueStandings.standings
+export const LeagueStandings: React.FC<StandingsProps> = ({ standings, loading }) => {
+    if (!standings) {
+        return null
+    }
+    if (standings.hasOwnProperty("originalLeagueRankings")) {
+        const { originalLeagueRankings } = standings
 
         if (originalLeagueRankings.length > 0) {
             const columns = defaultStandingsColumns;
             const rows = mapStandings(originalLeagueRankings)
             return (
                 <Box sx={{ height: 400, width: '100%' }}>
+                    <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>League Standings</Typography>
                     <DataGrid
+                        loading={loading}
                         rows={rows}
                         columns={columns}
                         initialState={{
@@ -34,7 +39,9 @@ export const LeagueStandings = (leagueStandings: any) => {
                         fontWeight: 'bolder'
                     }
                 }}>
+                    <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>League Standings</Typography>
                     <DataGrid
+                        loading={loading}
                         rows={rows}
                         columns={columns}
                         initialState={{
