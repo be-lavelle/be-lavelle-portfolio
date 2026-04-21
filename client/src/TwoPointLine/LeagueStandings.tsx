@@ -2,8 +2,9 @@ import React from "react";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Box, Typography } from "@mui/material";
 import { defaultStandingsColumns, defaultStandingsRows } from "../utils/Consts";
-import { mapStandings } from "../utils/Utils";
+import { isInPlayoffs, mapStandings } from "../utils/Utils";
 import { StandingsProps } from "../utils/Types";
+import { playoffTeamRowStyling, standingsTitle } from "../utils/StylingConsts";
 
 export const LeagueStandings: React.FC<StandingsProps> = ({ standings, loading }) => {
     if (!standings) {
@@ -17,7 +18,7 @@ export const LeagueStandings: React.FC<StandingsProps> = ({ standings, loading }
             const rows = mapStandings(originalLeagueRankings)
             return (
                 <Box sx={{ height: 400, width: '100%' }}>
-                    <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>League Standings</Typography>
+                    <Typography variant="h5" sx={standingsTitle}>League Standings</Typography>
                     <DataGrid
                         loading={loading}
                         rows={rows}
@@ -26,6 +27,8 @@ export const LeagueStandings: React.FC<StandingsProps> = ({ standings, loading }
                         }}
                         hideFooter
                         disableRowSelectionOnClick
+                        getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                        sx={playoffTeamRowStyling}
                     />
                 </ Box>
             );
@@ -39,7 +42,7 @@ export const LeagueStandings: React.FC<StandingsProps> = ({ standings, loading }
                         fontWeight: 'bolder'
                     }
                 }}>
-                    <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>League Standings</Typography>
+                    <Typography variant="h5" sx={standingsTitle}>League Standings</Typography>
                     <DataGrid
                         loading={loading}
                         rows={rows}

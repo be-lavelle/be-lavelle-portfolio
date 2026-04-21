@@ -2,8 +2,9 @@ import React from "react";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Box, Grid, Typography } from "@mui/material";
 import { defaultStandingsColumns, defaultStandingsRows } from "../utils/Consts";
-import { mapStandings } from "../utils/Utils";
+import { isInPlayoffs, mapStandings } from "../utils/Utils";
 import { StandingsProps } from "../utils/Types";
+import { playoffTeamRowStyling, standingsTitle } from "../utils/StylingConsts";
 
 export const ConferenceStandings: React.FC<StandingsProps> = ({ standings, loading }) => {
     console.log(standings);
@@ -20,7 +21,7 @@ export const ConferenceStandings: React.FC<StandingsProps> = ({ standings, loadi
             return (
                 <Grid container spacing={1} width={"auto"} >
                     <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>Western Conference</Typography>
+                        <Typography variant="h5" sx={standingsTitle}>Western Conference</Typography>
                         <Box sx={{ height: 400, width: '100%' }}>
                             <DataGrid
                                 loading={loading}
@@ -30,11 +31,14 @@ export const ConferenceStandings: React.FC<StandingsProps> = ({ standings, loadi
                                 }}
                                 hideFooter
                                 disableRowSelectionOnClick
+                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                sx={playoffTeamRowStyling}
+
                             />
                         </ Box>
                     </Grid>
                     <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>Eastern Conference</Typography>
+                        <Typography variant="h5" sx={standingsTitle}>Eastern Conference</Typography>
                         <Box sx={{ height: 400, width: '100%' }}>
                             <DataGrid
                                 loading={loading}
@@ -44,6 +48,9 @@ export const ConferenceStandings: React.FC<StandingsProps> = ({ standings, loadi
                                 }}
                                 hideFooter
                                 disableRowSelectionOnClick
+                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                sx={playoffTeamRowStyling}
+
                             />
                         </ Box>
                     </Grid>
@@ -56,7 +63,7 @@ export const ConferenceStandings: React.FC<StandingsProps> = ({ standings, loadi
             return (
                 <Grid container spacing={1} width={"auto"} >
                     <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>Western Conference</Typography>
+                        <Typography variant="h5" sx={standingsTitle}>Western Conference</Typography>
                         <Box sx={{ height: 400, width: '100%' }}>
                             <DataGrid
                                 loading={loading}
@@ -71,7 +78,7 @@ export const ConferenceStandings: React.FC<StandingsProps> = ({ standings, loadi
                     </Grid>
                     <Grid size={{ sm: 12, md: 6, lg: 6 }}>
                         <Box sx={{ height: 400, width: '100%' }}>
-                            <Typography variant="h5" sx={{ marginTop: 2, justifyContent: "center", display: "flex" }}>Eastern Conference</Typography>
+                            <Typography variant="h5" sx={standingsTitle}>Eastern Conference</Typography>
                             <DataGrid
                                 loading={loading}
                                 rows={rows}

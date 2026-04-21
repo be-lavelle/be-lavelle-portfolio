@@ -50,3 +50,15 @@ export const mappedGamesBoxStyle = {
   justifyContent: "center",
   flexWrap: "wrap",
 };
+
+export const playoffTeamRowStyling = {
+  '& .playoff-team:hover': {
+    "background-color": "rgb(200, 228, 200)"
+  }, '& .non-playoff-team:hover': {
+    "background-color": "rgb(213, 183, 189);"
+  },
+}
+
+export const standingsTitle = { marginTop: 2, marginBottom: 2, justifyContent: "center", display: "flex" }
+
+

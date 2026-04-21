@@ -1,3 +1,19 @@
 .MuiAccordionSummary-content {
   justify-content: center;
 }
+
+.playoff-team {
+  background-color: rgb(222, 255, 222);
+}
+
+.playoff-team:hover {
+  background-color: rgb(200, 228, 200);
+}
+
+.non-playoff-team {
+  background-color: rgb(255, 216, 224);
+}
+
+.non-playoff-team:hover {
+  background-color: rgb(213, 183, 189);
+}
