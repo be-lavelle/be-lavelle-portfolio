@@ -24,143 +24,154 @@ export const DivisionStandings: React.FC<StandingsProps> = ({ standings, loading
             const metropolitanRows = mapStandings(originalDivisionRankings.metropolitan)
 
             return (
-                <Grid container spacing={1} width={"auto"} >
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }} order={{ xs: 1, md: 1 }}>
-                        <Typography variant="h5" sx={standingsTitle}>Pacific Division</Typography>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                loading={loading}
-                                rows={pacificRows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
-                                sx={playoffTeamRowStyling}
+                <Box>
+                    <Grid container spacing={1} width={"auto"} >
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }} order={{ xs: 1, md: 1 }}>
+                            <Typography variant="h5" sx={standingsTitle}>Pacific Division</Typography>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={pacificRows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                    getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                    sx={playoffTeamRowStyling}
 
-                            />
-                        </ Box>
+                                />
+                            </ Box>
+                        </Grid>
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }} order={{ xs: 3, md: 2 }}>
+                            <Typography variant="h5" sx={standingsTitle}>Atlantic Division</Typography>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={atlanticRows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                    getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                    sx={playoffTeamRowStyling}
+
+
+                                />
+                            </ Box>
+                        </Grid>
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }} order={{ xs: 2, md: 3 }}>
+                            <Typography variant="h5" sx={standingsTitle}>Central Division</Typography>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={centralRows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                    getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                    sx={playoffTeamRowStyling}
+
+
+                                />
+                            </ Box>
+                        </Grid>
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }} order={{ xs: 4, md: 4 }}>
+                            <Typography variant="h5" sx={standingsTitle}>Metropolitan Division</Typography>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={metropolitanRows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                    getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                    sx={playoffTeamRowStyling}
+
+
+                                />
+                            </ Box>
+                        </Grid>
                     </Grid>
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }} order={{ xs: 3, md: 2 }}>
-                        <Typography variant="h5" sx={standingsTitle}>Atlantic Division</Typography>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                loading={loading}
-                                rows={atlanticRows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
-                                sx={playoffTeamRowStyling}
+                    <Typography sx={{ marginTop: 2, backgroundColor: "rgb(222, 255, 222)", fontFamily: "Faculty Glyphic" }}>Playoff Teams</Typography>
 
+                    <Typography sx={{ backgroundColor: "rgb(255, 216, 224)", fontFamily: "Faculty Glyphic" }}>Non-Playoff Teams</Typography>
 
-                            />
-                        </ Box>
-                    </Grid>
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }} order={{ xs: 2, md: 3 }}>
-                        <Typography variant="h5" sx={standingsTitle}>Central Division</Typography>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                loading={loading}
-                                rows={centralRows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
-                                sx={playoffTeamRowStyling}
-
-
-                            />
-                        </ Box>
-                    </Grid>
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }} order={{ xs: 4, md: 4 }}>
-                        <Typography variant="h5" sx={standingsTitle}>Metropolitan Division</Typography>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                loading={loading}
-                                rows={metropolitanRows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
-                                sx={playoffTeamRowStyling}
-
-
-                            />
-                        </ Box>
-                    </Grid>
-                </Grid>
-
+                </Box >
             );
         } else {
             const columns = defaultStandingsColumns;
             const rows = defaultStandingsRows
             return (
-                <Grid container spacing={1} width={"auto"} >
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography>Pacific Division</Typography>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                loading={loading}
-                                rows={rows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                            />
-                        </ Box>
+                <Box>
+                    <Grid container spacing={1} width={"auto"} >
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }}>
+                            <Typography>Pacific Division</Typography>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={rows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                />
+                            </ Box>
+                        </Grid>
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }}>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <Typography>Atlantic Division</Typography>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={rows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                />
+                            </ Box>
+                        </Grid>
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }}>
+                            <Typography>Central Division</Typography>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={rows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                />
+                            </ Box>
+                        </Grid>
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }}>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <Typography>Metropolitan Division</Typography>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={rows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                />
+                            </ Box>
+                        </Grid>
                     </Grid>
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <Typography>Atlantic Division</Typography>
-                            <DataGrid
-                                loading={loading}
-                                rows={rows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                            />
-                        </ Box>
-                    </Grid>
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography>Central Division</Typography>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                loading={loading}
-                                rows={rows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                            />
-                        </ Box>
-                    </Grid>
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <Typography>Metropolitan Division</Typography>
-                            <DataGrid
-                                loading={loading}
-                                rows={rows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                            />
-                        </ Box>
-                    </Grid>
-                </Grid>
+                    <Typography sx={{ marginTop: 2, backgroundColor: "rgb(222, 255, 222)", fontFamily: "Faculty Glyphic" }}>Playoff Teams</Typography>
+
+                    <Typography sx={{ backgroundColor: "rgb(255, 216, 224)", fontFamily: "Faculty Glyphic" }}>Non-Playoff Teams</Typography>
+
+                </Box >
             );
         }
     }

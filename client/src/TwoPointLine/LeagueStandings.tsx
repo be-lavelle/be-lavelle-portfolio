@@ -30,7 +30,11 @@ export const LeagueStandings: React.FC<StandingsProps> = ({ standings, loading }
                         getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
                         sx={playoffTeamRowStyling}
                     />
-                </ Box>
+                    <Typography sx={{ marginTop: 2, backgroundColor: "rgb(222, 255, 222)", fontFamily: "Faculty Glyphic" }}>Playoff Teams</Typography>
+
+                    <Typography sx={{ backgroundColor: "rgb(255, 216, 224)", fontFamily: "Faculty Glyphic" }}>Non-Playoff Teams</Typography>
+
+                </ Box >
             );
         } else {
             const columns = defaultStandingsColumns;
@@ -52,7 +56,11 @@ export const LeagueStandings: React.FC<StandingsProps> = ({ standings, loading }
                         hideFooter
                         disableRowSelectionOnClick
                     />
-                </ Box>
+                    <Typography sx={{ marginTop: 2, backgroundColor: "rgb(222, 255, 222)", fontFamily: "Faculty Glyphic" }}>Playoff Teams</Typography>
+
+                    <Typography sx={{ backgroundColor: "rgb(255, 216, 224)", fontFamily: "Faculty Glyphic" }}>Non-Playoff Teams</Typography>
+
+                </ Box >
             );
         }
     }

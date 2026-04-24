@@ -60,78 +60,89 @@ export const WildcardStandings: React.FC<StandingsProps> = ({ standings, loading
             })
 
             return (
-                <Grid container spacing={1} width={"auto"} >
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography variant="h5" sx={standingsTitle}>Western Wildcard Standings</Typography>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                loading={loading}
-                                rows={allWest}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
-                                sx={playoffTeamRowStyling}
-                            />
-                        </ Box>
+                <Box>
+                    <Grid container spacing={1} width={"auto"} >
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }}>
+                            <Typography variant="h5" sx={standingsTitle}>Western Wildcard Standings</Typography>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={allWest}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                    getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                    sx={playoffTeamRowStyling}
+                                />
+                            </ Box>
+                        </Grid>
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }}>
+                            <Typography variant="h5" sx={standingsTitle}>Eastern Wildcard Standings</Typography>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={allEast}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                    getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                    sx={playoffTeamRowStyling}
+                                />
+                            </ Box>
+                        </Grid>
                     </Grid>
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography variant="h5" sx={standingsTitle}>Eastern Wildcard Standings</Typography>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                loading={loading}
-                                rows={allEast}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
-                                sx={playoffTeamRowStyling}
-                            />
-                        </ Box>
-                    </Grid>
-                </Grid>
+                    <Typography sx={{ marginTop: 2, backgroundColor: "rgb(222, 255, 222)", fontFamily: "Faculty Glyphic" }}>Playoff Teams</Typography>
 
+                    <Typography sx={{ backgroundColor: "rgb(255, 216, 224)", fontFamily: "Faculty Glyphic" }}>Non-Playoff Teams</Typography>
+
+                </Box >
             );
         } else {
             const columns = defaultStandingsColumns;
             const rows = defaultStandingsRows
             return (
-                <Grid container spacing={1} width={"auto"} >
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Typography variant="h5" sx={standingsTitle}>Western Wildcard Standings</Typography>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <DataGrid
-                                loading={loading}
-                                rows={rows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
-                            />
-                        </ Box>
+                <Box>
+                    <Grid container spacing={1} width={"auto"} >
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }}>
+                            <Typography variant="h5" sx={standingsTitle}>Western Wildcard Standings</Typography>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={rows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                    getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                />
+                            </ Box>
+                        </Grid>
+                        <Grid size={{ sm: 12, md: 6, lg: 6 }}>
+                            <Box sx={{ height: 400, width: '100%' }}>
+                                <Typography variant="h5" sx={standingsTitle}>Eastern Wildcard Standings</Typography>
+                                <DataGrid
+                                    loading={loading}
+                                    rows={rows}
+                                    columns={columns}
+                                    initialState={{
+                                    }}
+                                    hideFooter
+                                    disableRowSelectionOnClick
+                                    getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
+                                />
+                            </ Box>
+                        </Grid>
                     </Grid>
-                    <Grid size={{ sm: 12, md: 6, lg: 6 }}>
-                        <Box sx={{ height: 400, width: '100%' }}>
-                            <Typography variant="h5" sx={standingsTitle}>Eastern Wildcard Standings</Typography>
-                            <DataGrid
-                                loading={loading}
-                                rows={rows}
-                                columns={columns}
-                                initialState={{
-                                }}
-                                hideFooter
-                                disableRowSelectionOnClick
-                                getRowClassName={(params) => { return isInPlayoffs(params.row.team, standings) }}
-                            />
-                        </ Box>
-                    </Grid>
-                </Grid>
+                    <Typography sx={{ marginTop: 2, backgroundColor: "rgb(222, 255, 222)", fontFamily: "Faculty Glyphic" }}>Playoff Teams</Typography>
+
+                    <Typography sx={{ backgroundColor: "rgb(255, 216, 224)", fontFamily: "Faculty Glyphic" }}>Non-Playoff Teams</Typography>
+
+                </Box >
             );
         }
     }

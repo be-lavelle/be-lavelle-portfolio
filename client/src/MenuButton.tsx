@@ -13,7 +13,7 @@ export const MenuButton = ({ to, name }: MenuButtonProps) => {
       color="inherit"
       component={Link}
       to={to}
-      sx={{ fontFamily: "Faculty Glyphic" }}
+      sx={{ fontFamily: "Faculty Glyphic", marginLeft: 2, }}
     >
       {name}
     </Button>

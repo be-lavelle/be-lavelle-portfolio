@@ -35,6 +35,7 @@ export const gridAbbrevItemStyle = {
 export const standingsTypeGridItem = {
   ...gridAbbrevItemStyle,
   border: 1,
+  borderColor: "rgba(224, 224, 224, 1)"
 }
 
 export const chipScoreStyle = (team: Team) => {
@@ -59,6 +60,19 @@ export const playoffTeamRowStyling = {
   },
 }
 
-export const standingsTitle = { marginTop: 2, marginBottom: 2, justifyContent: "center", display: "flex" }
+export const standingsTabStyle = {
+  width: "100%",
+  flexGrow: 1,
+  color: "#966a9e",
+  textDecoration: "none",
+  fontFamily: "Faculty Glyphic",
+}
+
+export const standingsTitle = {
+  flexGrow: 1,
+  color: "#966a9e",
+  textDecoration: "none",
+  fontFamily: "Faculty Glyphic", marginTop: 2, marginBottom: 2, justifyContent: "center", display: "flex"
+}
 
 

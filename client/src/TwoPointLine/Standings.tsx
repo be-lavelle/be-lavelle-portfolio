@@ -9,7 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from "dayjs";
 import { LeagueStandings } from "./LeagueStandings";
-import { gridAbbrevItemStyle, standingsTypeGridItem } from "../utils/StylingConsts";
+import { gridAbbrevItemStyle, standingsTabStyle, standingsTypeGridItem } from "../utils/StylingConsts";
 import { ConferenceStandings } from "./ConferenceStandings";
 import { DivisionStandings } from "./DivisionStandings";
 import { WildcardStandings } from "./WildcardStandings";
@@ -87,7 +87,7 @@ export const Standings = () => {
       <Grid container spacing={1} width={"auto"}>
         <Grid size={{ sm: 4, md: 4, lg: 4 }} sx={gridAbbrevItemStyle}>
           <NativeSelect defaultValue={"20252026"} onChange={handleOnChangeSeason} sx={{ width: "100%" }}>
-            <option value={"20252026"} disabled>2025-2026</option>
+            <option value={"20252026"} disabled hidden>2025-2026</option>
             {dropdownSeasons}
           </NativeSelect>
         </Grid>
@@ -100,15 +100,15 @@ export const Standings = () => {
       </Grid>
       {Object.keys(allStandings).length > 0 && <Grid container width={"auto"} margin="20px 0 0" justifyContent="center">
         <Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Wildcard)} sx={{ width: "100%" }}>Wildcard</Button>
+          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Wildcard)} sx={standingsTabStyle}>Wildcard</Button>
         </Grid>
         <Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Division)} sx={{ width: "100%" }}>Division</Button>
+          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Division)} sx={standingsTabStyle}>Division</Button>
         </Grid>
         <Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Conference)} sx={{ width: "100%" }}>Conference</Button>
+          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Conference)} sx={standingsTabStyle}>Conference</Button>
         </Grid><Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.League)} sx={{ width: "100%" }}>League</Button>
+          <Button onClick={(e) => handleOnChangeType(e, RankingsType.League)} sx={standingsTabStyle}>League</Button>
         </Grid>
       </Grid>}
       <Box>
