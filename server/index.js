@@ -18,15 +18,15 @@ import { GameBreakdown, Game } from "./models/gameBreakdown.model.js";
 app.use(cors());
 app.use(express.json());
 const mongoDBURL = process.env.MONGODB_URI;
-
+const port = process.env.PORT || 8080
 mongoose
   .connect(
     mongoDBURL,
   )
   .then(() => {
     console.log("Connected to db");
-    app.listen(process.env.PORT || 8080, () => {
-      console.log("server listening on port");
+    app.listen(port, () => {
+      console.log(`server listening on port ${port}`);
     });
   })
   .catch((error) => {
@@ -105,14 +105,8 @@ app.get("/season/:seasonId/", async (req, res) => {
         ...isAwayTeamAlreadyInDb,
       ];
       if (isTeamAlreadyInDb.length >= 82) {
-        console.log(
-          `Already got all the Team's games, boss - ${team} - ${season}`,
-        );
         return { team: team, data: isTeamAlreadyInDb };
       } else {
-        console.log(
-          `Haven't got this Team's games yet, boss - ${team} - ${season}`,
-        );
         let regularSeasonGames = await Promise.all(await getRegularSeasonGames(team, season));
         return { team: team, data: regularSeasonGames };
       }
@@ -135,7 +129,6 @@ app.get("/season/:seasonId/", async (req, res) => {
             ...isHomeTeamAlreadyInDb,
             ...isAwayTeamAlreadyInDb,
           ];
-          console.log("ALREADY IN DB", isTeamAlreadyInDb.length, team.team)
           if (isTeamAlreadyInDb.length < team.data.length) {
             const mappedDataGames = await Promise.all(
               team.data.map(async (game) => {
@@ -143,7 +136,6 @@ app.get("/season/:seasonId/", async (req, res) => {
                   "game.gameId": game.gameId,
                 });
                 if (isAlreadyInDb.length > 0) {
-                  console.log(`Already got the GameBreakdown, boss - ${game.gameId}`);
                   return isAlreadyInDb[0]
                 } else {
                   let gameBreakdown = await new Promise((resolve2, rej) => {
@@ -158,7 +150,6 @@ app.get("/season/:seasonId/", async (req, res) => {
               ))
             resolve(mappedDataGames)
           } else {
-            console.log(`Already mapped all ${team.team} games for ${season}`);
             resolve(isTeamAlreadyInDb)
           }
         }, Math.random() * 1000)
@@ -196,7 +187,6 @@ app.get("/team/:teamId/season/:seasonId", async (req, res) => {
   ];
   let teamSchedule = {};
   if (isTeamAlreadyInDb.length >= 82) {
-    console.log(`Already got all the Team's games, boss - ${team} - ${season}`);
     teamSchedule = isTeamAlreadyInDb;
   } else {
     teamSchedule = await Promise.all(await getRegularSeasonGames(team, season));
@@ -231,7 +221,6 @@ async function getGameData(gameId, season) {
         const gameBreakdown = getGameBreakdown(game, season);
         try {
           const newGameBreakdown = await GameBreakdown.create(gameBreakdown);
-          console.log(`New GameBreakdown coming right up, boss - ${game.id}`);
           return newGameBreakdown;
         } catch (error) {
           console.log(error.message);
@@ -276,15 +265,9 @@ async function getRegularSeasonGames(team, season) {
             gameId: gameToMap.gameId,
           });
           if (isAlreadyInDb.length > 0) {
-            console.log(
-              `Already got the Game, boss - ${gameToMap.gameId} - ${team}`,
-            );
             return isAlreadyInDb[0];
           } else {
             const newGame = await Game.create(gameToMap);
-            console.log(
-              `New Game coming right up, boss - ${gameToMap.gameId} - ${team}`,
-            );
             return newGame;
           }
         });

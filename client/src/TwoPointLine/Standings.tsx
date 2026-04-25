@@ -40,7 +40,6 @@ export const Standings = () => {
               setCurrentStandings(standingsByDate[selectedDate])
             } else {
               let keys = Object.keys(standingsByDate)
-              console.log(keys)
               const finalKey = keys[keys.length - 1]
               setCurrentStandings(standingsByDate[finalKey])
               setSelectedDate(finalKey)
@@ -59,7 +58,6 @@ export const Standings = () => {
   });
 
   const handleOnChangeSeason = (e: React.ChangeEvent<{ value: string }>) => {
-    console.log(e.target.value);
     setSelectedSeason(e.target.value);
   };
 

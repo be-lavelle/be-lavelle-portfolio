@@ -145,7 +145,7 @@ export function mapGamesToPoints(teamGames, isGameBreakdown = false) {
     let teamName = team.team
     let pointsAtGameDate = {}
     let sortedTeamGames = team.data.sort((a, b) => {
-      return a.game.gameId - b.game.gameId
+      return new Date(a.game.gameDate) - new Date(b.game.gameDate)
     })
     sortedTeamGames.forEach((game) => {
       let originalGame = {}
@@ -306,6 +306,7 @@ export function mapRankingsByDate(leagueRankings) {
   const { originalSorted: originalGames } = leagueRankings
   const dates = {}
   const teams = []
+
   originalGames.forEach((team) => {
     Object.keys(team.pointsAtGameDate).forEach((date) => {
       let teamName = team.team.teamName
@@ -361,6 +362,7 @@ export function mapRankingsByDate(leagueRankings) {
       let addedTeam = false
       dates[date].forEach((teamPlayedOnDate) => {
         if (teamPlayedOnDate.teamName === previousTeamPoints.teamName) {
+
           addedTeam = true
           originalTeamDataOnDate.push(teamPlayedOnDate)
         }
@@ -372,6 +374,7 @@ export function mapRankingsByDate(leagueRankings) {
     originalTeamDataOnDate = originalTeamDataOnDate.sort(sortOriginalPointsRankings())
     twoPointTeamDataOnDate = originalTeamDataOnDate.sort(sortTwoPointLinePointsRankings())
     previousDate = originalTeamDataOnDate
+
     allDatesWithLeagueRankings[date] = { originalTeamData: [...originalTeamDataOnDate], twoPointTeamData: [...twoPointTeamDataOnDate] }
   })
 

@@ -8,7 +8,6 @@ import { playoffTeamRowStyling, standingsTitle } from "../utils/StylingConsts";
 
 
 export const DivisionStandings: React.FC<StandingsProps> = ({ standings, loading }) => {
-    console.log(standings);
     if (!standings) {
         return null
     }

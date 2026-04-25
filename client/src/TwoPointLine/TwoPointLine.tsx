@@ -42,7 +42,6 @@ export const TwoPointLine = () => {
           `${process.env.REACT_APP_BACKEND_URI}/team/${selectedTeam}/season/${selectedSeason}`,
         )
         .then((data) => {
-          console.log(data);
           games = data.data;
           let gameMap = games.map((game) => {
             const homeTeam: Team = createTeam(
@@ -76,12 +75,10 @@ export const TwoPointLine = () => {
   };
 
   const handleOnChangeSeason = (e: React.ChangeEvent<{ value: string }>) => {
-    console.log(e.target.value);
     setSelectedSeason(e.target.value);
   };
 
   const handleOnChangeTeam = (e: React.ChangeEvent<{ value: string }>) => {
-    console.log(e.target.value);
     setSelectedTeam(e.target.value);
   };
 

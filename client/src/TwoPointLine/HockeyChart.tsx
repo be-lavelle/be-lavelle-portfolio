@@ -15,7 +15,6 @@ import { allTeamColors } from "../utils/Consts";
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 export const HockeyChart = (goals: any) => {
-  console.log(goals);
   if (Object.keys(goals.goals).length !== 0) {
     const goalsForGame = goals.goals;
     let homeGoals = goalsForGame.homeTeamGoals.map((goal) => {
