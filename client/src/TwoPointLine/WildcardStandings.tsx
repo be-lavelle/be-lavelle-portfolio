@@ -12,16 +12,16 @@ export const WildcardStandings: React.FC<StandingsProps> = ({ standings, loading
     if (!standings) {
         return null
     }
-    if (standings.hasOwnProperty("originalWildcardRankings")) {
-        const { originalWildcardRankings } = standings
+    if (standings.hasOwnProperty("originalWildcardStandings")) {
+        const { originalWildcardStandings } = standings
 
-        if (originalWildcardRankings.top3Pacific.length > 0) {
+        if (originalWildcardStandings.top3Pacific.length > 0) {
             const columns = defaultStandingsColumns;
 
-            const top3PacificRows = mapStandings(originalWildcardRankings.top3Pacific)
-            const top3CentralRows = mapStandings(originalWildcardRankings.top3Central)
-            const westWildcardsRows = mapStandings(originalWildcardRankings.westWildcards)
-            const restOfWestRows = mapStandings(originalWildcardRankings.restOfWest)
+            const top3PacificRows = mapStandings(originalWildcardStandings.top3Pacific)
+            const top3CentralRows = mapStandings(originalWildcardStandings.top3Central)
+            const westWildcardsRows = mapStandings(originalWildcardStandings.westWildcards)
+            const restOfWestRows = mapStandings(originalWildcardStandings.restOfWest)
             const westPlayoffs = [...top3PacificRows, ...top3CentralRows].sort((a, b) => {
                 return b.points - a.points
             })
@@ -40,10 +40,10 @@ export const WildcardStandings: React.FC<StandingsProps> = ({ standings, loading
             console.log(allWest);
 
 
-            const top3AtlanticRows = mapStandings(originalWildcardRankings.top3Atlantic)
-            const top3MetropolitanRows = mapStandings(originalWildcardRankings.top3Metropolitan)
-            const eastWildcardsRows = mapStandings(originalWildcardRankings.eastWildcards)
-            const restOfEastRows = mapStandings(originalWildcardRankings.restOfEast)
+            const top3AtlanticRows = mapStandings(originalWildcardStandings.top3Atlantic)
+            const top3MetropolitanRows = mapStandings(originalWildcardStandings.top3Metropolitan)
+            const eastWildcardsRows = mapStandings(originalWildcardStandings.eastWildcards)
+            const restOfEastRows = mapStandings(originalWildcardStandings.restOfEast)
             const eastPlayoffs = [...top3AtlanticRows, ...top3MetropolitanRows].sort((a, b) => {
                 return b.points - a.points
             })

@@ -94,29 +94,29 @@ export const allTeamColors = {
 };
 
 export const defaultStandings = {
-  "originalLeagueRankings": [],
-  "twoPointLineLeagueRankings": [],
-  "originalDivisionRankings": {
+  "originalLeagueStandings": [],
+  "twoPointLineLeagueStandings": [],
+  "originalDivisionStandings": {
     "pacific": [],
     "central": [],
     "atlantic": [],
     "metropolitan": []
   },
-  "twoPointLineDivisionRankings": {
+  "twoPointLineDivisionStandings": {
     "pacific": [],
     "central": [],
     "atlantic": [],
     "metropolitan": []
   },
-  "originalConferenceRankings": {
+  "originalConferenceStandings": {
     "eastern": [],
     "western": [],
   },
-  "twoPointLineConferenceRankings": {
+  "twoPointLineConferenceStandings": {
     "eastern": [],
     "western": [],
   },
-  "originalWildcardRankings": {
+  "originalWildcardStandings": {
     "top3Atlantic": [],
     "top3Central": [],
     "top3Metropolitan": [],
@@ -126,7 +126,7 @@ export const defaultStandings = {
     "restOfEast": [],
     "restOfWest": []
   },
-  "twoPointLineWildcardRankings": {
+  "twoPointLineWildcardStandings": {
     "top3Atlantic": [],
     "top3Central": [],
     "top3Metropolitan": [],
@@ -140,7 +140,7 @@ export const defaultStandings = {
 
 export const defaultStandingsColumns: GridColDef<Standings>[] = [
   {
-    field: 'id', headerName: 'Rank', width: 50,
+    field: 'id', headerName: 'Position', width: 50,
     align: 'center',
     headerAlign: 'center',
     headerClassName: 'data-grid-header',

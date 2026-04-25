@@ -10,12 +10,12 @@ export const LeagueStandings: React.FC<StandingsProps> = ({ standings, loading }
     if (!standings) {
         return null
     }
-    if (standings.hasOwnProperty("originalLeagueRankings")) {
-        const { originalLeagueRankings } = standings
+    if (standings.hasOwnProperty("originalLeagueStandings")) {
+        const { originalLeagueStandings } = standings
 
-        if (originalLeagueRankings.length > 0) {
+        if (originalLeagueStandings.length > 0) {
             const columns = defaultStandingsColumns;
-            const rows = mapStandings(originalLeagueRankings)
+            const rows = mapStandings(originalLeagueStandings)
             return (
                 <Box sx={{ height: 400, width: '100%' }}>
                     <Typography variant="h5" sx={standingsTitle}>League Standings</Typography>

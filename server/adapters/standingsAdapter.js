@@ -224,70 +224,70 @@ export function mapGamesToPoints(teamGames, isGameBreakdown = false) {
   return allMappedTeamData;
 }
 
-export function mapPointsToLeagueRankings(allTeamPoints) {
-  const originalSorted = allTeamPoints.sort(sortOriginalPointsRankings()).filter((x) => x);
-  const twoPointLineSorted = allTeamPoints.sort(sortTwoPointLinePointsRankings()).filter((x) => x)
+export function mapPointsToLeagueStandings(allTeamPoints) {
+  const originalSorted = allTeamPoints.sort(sortOriginalPointsStandings()).filter((x) => x);
+  const twoPointLineSorted = allTeamPoints.sort(sortTwoPointLinePointsStandings()).filter((x) => x)
   return { originalSorted, twoPointLineSorted };
 }
 
-export function mapPointsToDivisionRankings(leagueRankings) {
-  if (leagueRankings) {
-    let pacific = leagueRankings.filter((team) => {
+export function mapPointsToDivisionStandings(leagueStandings) {
+  if (leagueStandings) {
+    let pacific = leagueStandings.filter((team) => {
       return allTeams[team.teamName].division === "Pacific";
-    }).sort(sortOriginalPointsRankings()).filter((x) => x)
-    let atlantic = leagueRankings.filter((team) => {
+    }).sort(sortOriginalPointsStandings()).filter((x) => x)
+    let atlantic = leagueStandings.filter((team) => {
       return allTeams[team.teamName].division === "Atlantic";
-    }).sort(sortOriginalPointsRankings()).filter((x) => x)
-    let central = leagueRankings.filter((team) => {
+    }).sort(sortOriginalPointsStandings()).filter((x) => x)
+    let central = leagueStandings.filter((team) => {
       return allTeams[team.teamName].division === "Central";
-    }).sort(sortOriginalPointsRankings()).filter((x) => x)
-    let metropolitan = leagueRankings.filter((team) => {
+    }).sort(sortOriginalPointsStandings()).filter((x) => x)
+    let metropolitan = leagueStandings.filter((team) => {
       return allTeams[team.teamName].division === "Metropolitan";
-    }).sort(sortOriginalPointsRankings()).filter((x) => x)
+    }).sort(sortOriginalPointsStandings()).filter((x) => x)
     return { pacific, central, atlantic, metropolitan };
   }
   return {};
 }
 
-export function mapPointsToConferenceRankings(divisionRankings, isTwoPointLine = false) {
+export function mapPointsToConferenceStandings(divisionStandings, isTwoPointLine = false) {
   let eastern = [
-    ...divisionRankings.atlantic,
-    ...divisionRankings.metropolitan,
+    ...divisionStandings.atlantic,
+    ...divisionStandings.metropolitan,
   ];
-  let western = [...divisionRankings.pacific, ...divisionRankings.central];
+  let western = [...divisionStandings.pacific, ...divisionStandings.central];
   if (isTwoPointLine) {
     return {
-      eastern: eastern.sort(sortTwoPointLinePointsRankings()),
-      western: western.sort(sortTwoPointLinePointsRankings())
+      eastern: eastern.sort(sortTwoPointLinePointsStandings()),
+      western: western.sort(sortTwoPointLinePointsStandings())
     }
   } else {
     return {
-      eastern: eastern.sort(sortOriginalPointsRankings()),
-      western: western.sort(sortOriginalPointsRankings())
+      eastern: eastern.sort(sortOriginalPointsStandings()),
+      western: western.sort(sortOriginalPointsStandings())
     };
   }
 
 }
 
-export function mapPointsToWildcardRankings(divisionRankings, isTwoPointLine = false) {
-  const top3Pacific = divisionRankings.pacific.slice(0, 3);
-  const restOfPacific = divisionRankings.pacific.slice(3);
-  const top3Atlantic = divisionRankings.atlantic.slice(0, 3);
-  const restOfAtlantic = divisionRankings.atlantic.slice(3);
-  const top3Metropolitan = divisionRankings.metropolitan.slice(0, 3);
-  const restOfMetropolitan = divisionRankings.metropolitan.slice(3);
-  const top3Central = divisionRankings.central.slice(0, 3);
-  const restOfCentral = divisionRankings.central.slice(3);
+export function mapPointsToWildcardStandings(divisionStandings, isTwoPointLine = false) {
+  const top3Pacific = divisionStandings.pacific.slice(0, 3);
+  const restOfPacific = divisionStandings.pacific.slice(3);
+  const top3Atlantic = divisionStandings.atlantic.slice(0, 3);
+  const restOfAtlantic = divisionStandings.atlantic.slice(3);
+  const top3Metropolitan = divisionStandings.metropolitan.slice(0, 3);
+  const restOfMetropolitan = divisionStandings.metropolitan.slice(3);
+  const top3Central = divisionStandings.central.slice(0, 3);
+  const restOfCentral = divisionStandings.central.slice(3);
 
 
   let restOfEast = [...restOfAtlantic, ...restOfMetropolitan]
   let restOfWest = [...restOfPacific, ...restOfCentral]
   if (isTwoPointLine) {
-    restOfEast = restOfEast.sort(sortTwoPointLinePointsRankings())
-    restOfWest = restOfWest.sort(sortTwoPointLinePointsRankings())
+    restOfEast = restOfEast.sort(sortTwoPointLinePointsStandings())
+    restOfWest = restOfWest.sort(sortTwoPointLinePointsStandings())
   } else {
-    restOfEast = restOfEast.sort(sortOriginalPointsRankings())
-    restOfWest = restOfWest.sort(sortOriginalPointsRankings())
+    restOfEast = restOfEast.sort(sortOriginalPointsStandings())
+    restOfWest = restOfWest.sort(sortOriginalPointsStandings())
   }
 
   return {
@@ -302,8 +302,8 @@ export function mapPointsToWildcardRankings(divisionRankings, isTwoPointLine = f
   };
 }
 
-export function mapRankingsByDate(leagueRankings) {
-  const { originalSorted: originalGames } = leagueRankings
+export function mapStandingsByDate(leagueStandings) {
+  const { originalSorted: originalGames } = leagueStandings
   const dates = {}
   const teams = []
 
@@ -323,8 +323,8 @@ export function mapRankingsByDate(leagueRankings) {
   const sortedKeys = Object.keys(dates).sort((a, b) => {
     return new Date(a) - new Date(b)
   })
-  let rankingsByDate = {}
-  rankingsByDate[sortedKeys[0]] = teams.map((team) => {
+  let standingsByDate = {}
+  standingsByDate[sortedKeys[0]] = teams.map((team) => {
     let addedTeam = false
     let teamDataOnDate = {}
     dates[sortedKeys[0]].forEach((teamPlayedOnDate) => {
@@ -352,9 +352,9 @@ export function mapRankingsByDate(leagueRankings) {
     return teamDataOnDate
   })
 
-  let previousDate = rankingsByDate[sortedKeys[0]]
-  let allDatesWithLeagueRankings = {}
-  allDatesWithLeagueRankings[sortedKeys[0]] = { originalTeamData: [...previousDate], twoPointTeamData: [...previousDate] }
+  let previousDate = standingsByDate[sortedKeys[0]]
+  let allDatesWithLeagueStandings = {}
+  allDatesWithLeagueStandings[sortedKeys[0]] = { originalTeamData: [...previousDate], twoPointTeamData: [...previousDate] }
   sortedKeys.slice(1).forEach((date) => {
     let originalTeamDataOnDate = []
     let twoPointTeamDataOnDate = []
@@ -371,39 +371,46 @@ export function mapRankingsByDate(leagueRankings) {
         originalTeamDataOnDate.push({ ...previousTeamPoints })
       }
     })
-    originalTeamDataOnDate = originalTeamDataOnDate.sort(sortOriginalPointsRankings())
-    twoPointTeamDataOnDate = originalTeamDataOnDate.sort(sortTwoPointLinePointsRankings())
+    originalTeamDataOnDate = originalTeamDataOnDate.sort(sortOriginalPointsStandings())
+    twoPointTeamDataOnDate = originalTeamDataOnDate.sort(sortTwoPointLinePointsStandings())
     previousDate = originalTeamDataOnDate
 
-    allDatesWithLeagueRankings[date] = { originalTeamData: [...originalTeamDataOnDate], twoPointTeamData: [...twoPointTeamDataOnDate] }
+    allDatesWithLeagueStandings[date] = { originalTeamData: [...originalTeamDataOnDate], twoPointTeamData: [...twoPointTeamDataOnDate] }
   })
 
-  let allDatesWithAllRankings = {}
+  let allDatesWithAllStandings = {}
   sortedKeys.forEach((date) => {
-    const originalLeagueRankings = allDatesWithLeagueRankings[date].originalTeamData.sort(sortOriginalPointsRankings())
-    const twoPointLineLeagueRankings = allDatesWithLeagueRankings[date].twoPointTeamData.sort(sortTwoPointLinePointsRankings())
-    const originalDivisionRankings = mapPointsToDivisionRankings(originalLeagueRankings)
-    const twoPointLineDivisionRankings = mapPointsToDivisionRankings(twoPointLineLeagueRankings)
-    const originalConferenceRankings = mapPointsToConferenceRankings(originalDivisionRankings)
-    const twoPointLineConferenceRankings = mapPointsToConferenceRankings(twoPointLineDivisionRankings, true)
-    const originalWildcardRankings = mapPointsToWildcardRankings(originalDivisionRankings)
-    const twoPointLineWildcardRankings = mapPointsToWildcardRankings(twoPointLineDivisionRankings, true)
-    allDatesWithAllRankings[date] = {
-      originalLeagueRankings,
-      twoPointLineLeagueRankings,
-      originalDivisionRankings,
-      twoPointLineDivisionRankings,
-      originalConferenceRankings,
-      twoPointLineConferenceRankings,
-      originalWildcardRankings,
-      twoPointLineWildcardRankings,
+    const originalLeagueStandings = allDatesWithLeagueStandings[date].originalTeamData.sort(sortOriginalPointsStandings())
+    const twoPointLineLeagueStandings = allDatesWithLeagueStandings[date].twoPointTeamData.sort(sortTwoPointLinePointsStandings())
+    const originalDivisionStandings = mapPointsToDivisionStandings(originalLeagueStandings)
+    const twoPointLineDivisionStandings = mapPointsToDivisionStandings(twoPointLineLeagueStandings)
+    const originalConferenceStandings = mapPointsToConferenceStandings(originalDivisionStandings)
+    const twoPointLineConferenceStandings = mapPointsToConferenceStandings(twoPointLineDivisionStandings, true)
+    const originalWildcardStandings = mapPointsToWildcardStandings(originalDivisionStandings)
+    const twoPointLineWildcardStandings = mapPointsToWildcardStandings(twoPointLineDivisionStandings, true)
+    allDatesWithAllStandings[date] = {
+      originalLeagueStandings,
+      twoPointLineLeagueStandings,
+      originalDivisionStandings,
+      twoPointLineDivisionStandings,
+      originalConferenceStandings,
+      twoPointLineConferenceStandings,
+      originalWildcardStandings,
+      twoPointLineWildcardStandings,
     }
   })
 
-  return allDatesWithAllRankings
+  return allDatesWithAllStandings
 }
 
-function sortOriginalPointsRankings() {
+export function mapDatedStandingsForChart(datedStandings) {
+  const keys = Object.keys(datedStandings)
+  keys.forEach((date) => {
+
+  })
+}
+
+function sortOriginalPointsStandings() {
   return function (a, b) {
     if (b.originalPoints === a.originalPoints) {
       if (b.originalPointsPercentage === a.originalPointsPercentage) {
@@ -425,7 +432,7 @@ function sortOriginalPointsRankings() {
   };
 }
 
-function sortTwoPointLinePointsRankings() {
+function sortTwoPointLinePointsStandings() {
   return function (a, b) {
     if (b.twoPointLinePoints === a.twoPointLinePoints) {
       if (b.twoPointLinePointsPercentage === a.twoPointLinePointsPercentage) {

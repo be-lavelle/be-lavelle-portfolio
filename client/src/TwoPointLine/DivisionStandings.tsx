@@ -11,16 +11,16 @@ export const DivisionStandings: React.FC<StandingsProps> = ({ standings, loading
     if (!standings) {
         return null
     }
-    if (standings.hasOwnProperty("originalDivisionRankings")) {
-        const { originalDivisionRankings } = standings
+    if (standings.hasOwnProperty("originalDivisionStandings")) {
+        const { originalDivisionStandings } = standings
 
-        if (originalDivisionRankings.pacific.length > 0) {
+        if (originalDivisionStandings.pacific.length > 0) {
             const columns = defaultStandingsColumns;
 
-            const pacificRows = mapStandings(originalDivisionRankings.pacific)
-            const centralRows = mapStandings(originalDivisionRankings.central)
-            const atlanticRows = mapStandings(originalDivisionRankings.atlantic)
-            const metropolitanRows = mapStandings(originalDivisionRankings.metropolitan)
+            const pacificRows = mapStandings(originalDivisionStandings.pacific)
+            const centralRows = mapStandings(originalDivisionStandings.central)
+            const atlanticRows = mapStandings(originalDivisionStandings.atlantic)
+            const metropolitanRows = mapStandings(originalDivisionStandings.metropolitan)
 
             return (
                 <Box>

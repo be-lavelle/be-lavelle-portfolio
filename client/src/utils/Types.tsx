@@ -61,7 +61,7 @@ export type Standings = {
   totalWins: number;
 }
 
-export enum RankingsType {
+export enum StandingsType {
   Wildcard = "Wildcard",
   Division = "Division",
   Conference = "Conference",

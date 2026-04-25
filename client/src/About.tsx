@@ -8,6 +8,7 @@ export const About = () => {
       <Typography variant="h4" sx={h4Style}>About Me</Typography>
       <Typography sx={{ marginTop: 2, marginBottom: 2 }}>Be Lavelle is a Software Engineer with 7+ years of experience working with React, Typescript, Javascript, GraphQL, and Kotlin.</Typography>
       <Typography sx={{ marginTop: 2, marginBottom: 2 }}>This site is built with a React/Typescript front-end, and uses an express backend. The data is fetched from the NHL API and cached in a MongoDb cluster for faster retrieval</Typography>
+      <Typography sx={{ marginTop: 2, marginBottom: 2 }}><a target="_blank" rel="noopener noreferrer" href="https://github.com/be-lavelle/be-lavelle-portfolio">Github codebase here</a></Typography>
     </>
   );
 };

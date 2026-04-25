@@ -13,14 +13,14 @@ export const mapStandings = (standings) => {
 }
 
 export function isInPlayoffs(team: string, standings: any): string {
-    const { originalWildcardRankings } = standings
+    const { originalWildcardStandings } = standings
     let eliminatedFromPlayoffs = false
-    originalWildcardRankings.restOfWest.forEach((t: any) => {
+    originalWildcardStandings.restOfWest.forEach((t: any) => {
         if (t.teamName === team) {
             eliminatedFromPlayoffs = true
         }
     })
-    originalWildcardRankings.restOfEast.forEach((t: any) => {
+    originalWildcardStandings.restOfEast.forEach((t: any) => {
         if (t.teamName === team) {
             eliminatedFromPlayoffs = true
         }

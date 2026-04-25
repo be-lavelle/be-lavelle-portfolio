@@ -75,4 +75,11 @@ export const standingsTitle = {
   fontFamily: "Faculty Glyphic", marginTop: 2, marginBottom: 2, justifyContent: "center", display: "flex"
 }
 
+export const standingsErrorMessage = {
+  flexGrow: 1,
+  color: "#aa4646",
+  textDecoration: "none",
+  fontFamily: "Faculty Glyphic", marginTop: 2, marginBottom: 2, justifyContent: "center", display: "flex"
+}
+
 

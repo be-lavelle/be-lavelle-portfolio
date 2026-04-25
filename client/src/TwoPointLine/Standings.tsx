@@ -4,25 +4,26 @@ import axios from "axios";
 import { Box, Grid, NativeSelect, Toolbar, Typography } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { defaultStandings, seasons } from "../utils/Consts";
-import { RankingsType } from "../utils/Types";
+import { StandingsType } from "../utils/Types";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from "dayjs";
 import { LeagueStandings } from "./LeagueStandings";
-import { gridAbbrevItemStyle, standingsTabStyle, standingsTypeGridItem } from "../utils/StylingConsts";
+import { gridAbbrevItemStyle, standingsErrorMessage, standingsTabStyle, standingsTitle, standingsTypeGridItem } from "../utils/StylingConsts";
 import { ConferenceStandings } from "./ConferenceStandings";
 import { DivisionStandings } from "./DivisionStandings";
 import { WildcardStandings } from "./WildcardStandings";
-import { log } from "console";
+import { error, log } from "console";
 
 export const Standings = () => {
   const [selectedSeason, setSelectedSeason] = React.useState("20252026");
   const [allStandings, setAllStandings] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   const [currentStandings, setCurrentStandings] = React.useState(defaultStandings);
-  const [standingsType, setStandingsType] = React.useState(RankingsType.League);
+  const [standingsType, setStandingsType] = React.useState(StandingsType.League);
   const [selectedDate, setSelectedDate] = React.useState<string | null>(dayjs().format("YYYY-MM-DD").toString());
   const [defaultDate, setDefaultDate] = React.useState<Dayjs | null>(dayjs());
+  const [errorMessage, setErrorMessage] = React.useState("")
 
   useEffect(() => {
     setLoading(true)
@@ -33,10 +34,11 @@ export const Standings = () => {
           .get(`${process.env.REACT_APP_BACKEND_URI}/season/${selectedSeason}/`)
           .then((json) => {
             setLoading(false)
-            let standingsByDate = json.data.mappedRankingsByDate;
+            let standingsByDate = json.data.mappedStandingsByDate;
             console.log(standingsByDate)
             setAllStandings(standingsByDate);
             if (standingsByDate.hasOwnProperty(selectedDate)) {
+              setErrorMessage("")
               setCurrentStandings(standingsByDate[selectedDate])
             } else {
               let keys = Object.keys(standingsByDate)
@@ -61,7 +63,7 @@ export const Standings = () => {
     setSelectedSeason(e.target.value);
   };
 
-  const handleOnChangeType = (e: React.SyntheticEvent, type: RankingsType) => {
+  const handleOnChangeType = (e: React.SyntheticEvent, type: StandingsType) => {
     setStandingsType(type)
   }
 
@@ -70,12 +72,27 @@ export const Standings = () => {
     const finalKey = keys[keys.length - 1]
     if (keys.length > 0) {
       if (allStandings.hasOwnProperty(date)) {
+        setErrorMessage("")
         setCurrentStandings(allStandings[date])
         setSelectedDate(date)
       } else {
-        setCurrentStandings(allStandings[finalKey])
-        setSelectedDate(finalKey)
-        setDefaultDate(dayjs(finalKey))
+        const keysWithExtraDate = [...keys, date].sort((a, b) => {
+          return new Date(a).getTime() - new Date(b).getTime()
+        })
+        const indexOfExtraDate = keysWithExtraDate.indexOf(date)
+        if (indexOfExtraDate < keys.length - 1) {
+          const closestKey = keys[indexOfExtraDate]
+          setErrorMessage(`No games on ${date}, closest date is ${closestKey}`)
+          setCurrentStandings(allStandings[closestKey])
+          setSelectedDate(closestKey)
+          setDefaultDate(dayjs(closestKey))
+        } else {
+          setErrorMessage(`No games on ${date}, closest date is ${finalKey}`)
+          setCurrentStandings(allStandings[finalKey])
+          setSelectedDate(finalKey)
+          setDefaultDate(dayjs(finalKey))
+        }
+
       }
     }
   }
@@ -83,9 +100,9 @@ export const Standings = () => {
   return (
     <div>
       <Grid container spacing={1} width={"auto"}>
-        <Grid size={{ sm: 4, md: 4, lg: 4 }} sx={gridAbbrevItemStyle}>
+        <Grid size={{ sm: 2, md: 2, lg: 2 }} sx={gridAbbrevItemStyle}>
           <NativeSelect defaultValue={"20252026"} onChange={handleOnChangeSeason} sx={{ width: "100%" }}>
-            <option value={"20252026"} disabled hidden>2025-2026</option>
+            <option value={"20252026"} disabled hidden>25-26</option>
             {dropdownSeasons}
           </NativeSelect>
         </Grid>
@@ -95,25 +112,29 @@ export const Standings = () => {
           </LocalizationProvider>
         </Grid>
         }
+        {errorMessage !== "" && <Grid size={{ sm: 6, md: 6, lg: 6 }} sx={gridAbbrevItemStyle}>
+          <Typography sx={standingsErrorMessage}>{errorMessage}</Typography>
+        </Grid>
+        }
       </Grid>
       {Object.keys(allStandings).length > 0 && <Grid container width={"auto"} margin="20px 0 0" justifyContent="center">
         <Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Wildcard)} sx={standingsTabStyle}>Wildcard</Button>
+          <Button onClick={(e) => handleOnChangeType(e, StandingsType.Wildcard)} sx={standingsTabStyle}>Wildcard</Button>
         </Grid>
         <Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Division)} sx={standingsTabStyle}>Division</Button>
+          <Button onClick={(e) => handleOnChangeType(e, StandingsType.Division)} sx={standingsTabStyle}>Division</Button>
         </Grid>
         <Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.Conference)} sx={standingsTabStyle}>Conference</Button>
+          <Button onClick={(e) => handleOnChangeType(e, StandingsType.Conference)} sx={standingsTabStyle}>Conference</Button>
         </Grid><Grid size={{ sm: 3, md: 3, lg: 3 }} sx={standingsTypeGridItem}>
-          <Button onClick={(e) => handleOnChangeType(e, RankingsType.League)} sx={standingsTabStyle}>League</Button>
+          <Button onClick={(e) => handleOnChangeType(e, StandingsType.League)} sx={standingsTabStyle}>League</Button>
         </Grid>
       </Grid>}
       <Box>
-        {standingsType === RankingsType.League && <LeagueStandings standings={currentStandings} loading={loading} />}
-        {standingsType === RankingsType.Conference && <ConferenceStandings standings={currentStandings} loading={loading} />}
-        {standingsType === RankingsType.Division && <DivisionStandings standings={currentStandings} loading={loading} />}
-        {standingsType === RankingsType.Wildcard && <WildcardStandings standings={currentStandings} loading={loading} />}
+        {standingsType === StandingsType.League && <LeagueStandings standings={currentStandings} loading={loading} />}
+        {standingsType === StandingsType.Conference && <ConferenceStandings standings={currentStandings} loading={loading} />}
+        {standingsType === StandingsType.Division && <DivisionStandings standings={currentStandings} loading={loading} />}
+        {standingsType === StandingsType.Wildcard && <WildcardStandings standings={currentStandings} loading={loading} />}
       </Box>
     </div>
   );

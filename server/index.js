@@ -5,8 +5,9 @@ import { allTeams } from "./utils/consts.js";
 import {
   getGameBreakdown,
   mapGamesToPoints,
-  mapPointsToLeagueRankings,
-  mapRankingsByDate,
+  mapPointsToLeagueStandings,
+  mapStandingsByDate,
+  mapDatedStandingsForChart
 } from "./adapters/standingsAdapter.js";
 import 'dotenv/config'
 import { getAllRegularSeasonGamesForTeam } from "./adapters/gamesAdapter.js";
@@ -78,8 +79,6 @@ app.get("/deleteDupes/:seasonId", async (req, res) => {
   });
 });
 
-
-// TODO look at league sorting, why BUF above DAL
 app.get("/season/:seasonId/", async (req, res) => {
   const season = req.params.seasonId;
   let teams = Object.fromEntries(
@@ -89,7 +88,7 @@ app.get("/season/:seasonId/", async (req, res) => {
         ((season === "20242025" || season === "20252026") && key !== "ARI"),
     ),
   );
-
+  console.log(`Fetching ${season} data`)
   let allTeamData = await Promise.all(
     Object.keys(teams).map(async (team) => {
       const isHomeTeamAlreadyInDb = await Game.find({
@@ -161,10 +160,10 @@ app.get("/season/:seasonId/", async (req, res) => {
     }
     ))
     const mappedTeamData = mapGamesToPoints(allGameBreakdowns, true)
-    const leagueRankings = mapPointsToLeagueRankings(mappedTeamData);
-    const mappedRankingsByDate = mapRankingsByDate(leagueRankings)
-
-    res.send({ mappedRankingsByDate });
+    const leagueStandings = mapPointsToLeagueStandings(mappedTeamData);
+    const mappedStandingsByDate = mapStandingsByDate(leagueStandings)
+    const standingsToChart = mapDatedStandingsForChart(mappedStandingsByDate)
+    res.send({ mappedStandingsByDate });
   } catch (error) {
     console.log(error);
   }

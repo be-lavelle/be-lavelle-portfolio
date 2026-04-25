@@ -11,13 +11,13 @@ export const ConferenceStandings: React.FC<StandingsProps> = ({ standings, loadi
     if (!standings) {
         return null
     }
-    if (standings.hasOwnProperty("originalConferenceRankings")) {
-        const { originalConferenceRankings } = standings
+    if (standings.hasOwnProperty("originalConferenceStandings")) {
+        const { originalConferenceStandings } = standings
 
-        if (originalConferenceRankings.eastern.length > 0) {
+        if (originalConferenceStandings.eastern.length > 0) {
             const columns = defaultStandingsColumns;
-            const easternRows = mapStandings(originalConferenceRankings.eastern)
-            const westernRows = mapStandings(originalConferenceRankings.western)
+            const easternRows = mapStandings(originalConferenceStandings.eastern)
+            const westernRows = mapStandings(originalConferenceStandings.western)
             return (
                 <Box>
                     <Grid container spacing={1} width={"auto"} >
